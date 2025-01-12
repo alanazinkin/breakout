@@ -27,35 +27,37 @@ You can put links in like this: [Duke CompSci](https://www.cs.duke.edu)
 
 ## Interesting Breakout Variants
 
- * Idea #1:
-
+ * Idea #1: The super breakout variant is interesting because it allows the player to keep track of their score
+and provides the opportunity to level up their score by hitting different blocks.
 
  * Idea #2
 
 
 ## Paddle Ideas
 
- * Idea #1
+ * Idea #1: Catch and release paddle
 
- * Idea #2
+ * Idea #2: V shaped paddle with two sides
 
 
 ## Block Ideas
 
- * Idea #1: 
+ * Idea #1: Tough blocks that take 5 hits to break
 
- * Idea #2
+ * Idea #2: Different shaped blocks (ex: triangles and squares)
 
- * Idea #3
+ * Idea #3: Blocks that release a power up when destroyed
+
+ * Idea #4: Blocks that explode other surrounding blocks when destroyed 
 
 
 ## Power-up Ideas
 
- * Idea #1
+ * Idea #1: Extra balls 
 
- * Idea #2
+ * Idea #2: Slowing down the ball
 
- * Idea #3
+ * Idea #3: Larger paddle size
 
 
 ## Cheat Key Ideas
@@ -71,7 +73,7 @@ You can put links in like this: [Duke CompSci](https://www.cs.duke.edu)
 
 ## Level Descriptions
 
- * Idea #1
+ * Idea #1: 
 
  * Idea #2
 

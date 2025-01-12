@@ -60,13 +60,13 @@ You can put links in like this: [Duke CompSci](https://www.cs.duke.edu)
 
 ## Cheat Key Ideas
 
-* Idea #1: if the player holds down "delete," "A," and "Z" simultaneously, they will receive an extra life
+* Idea #1: if the player holds down "delete", they will receive an extra life
 
-* Idea #2: if the player presses "tab," "1," and "8," the ball will start to move in the other direction as if it hit something
+* Idea #2: if the player presses "1" and "8" simultaneously, the ball will start to move in the other direction as if it hit something
 
-* Idea #3: if the player hits the keys "c", "l," "e," "a," "r," "!", in a row, the player will clear the current level
+* Idea #3: if the player hits the key "!", they will clear the current level
 
-* Idea #4: if the player hits the keys "2," "0," "2," "5" in a row, the player will receive a random power up.
+* Idea #4: if the player hits the key "?", the player will receive a random power up.
 
 
 ## Level Descriptions

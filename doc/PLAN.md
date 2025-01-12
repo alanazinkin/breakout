@@ -30,7 +30,8 @@ You can put links in like this: [Duke CompSci](https://www.cs.duke.edu)
  * Idea #1: The super breakout variant is interesting because it allows the player to keep track of their score
 and provides the opportunity to level up their score by hitting different blocks.
 
- * Idea #2
+ * Idea #2: The balls and bricks variant is interesting because it feels like an entirely new game, yet only requires
+small updates to the original breakout game. 
 
 
 ## Paddle Ideas
@@ -73,9 +74,10 @@ and provides the opportunity to level up their score by hitting different blocks
 
 ## Level Descriptions
 
- * Idea #1: 
+ * Idea #1: The levels become increasingly challenging by increasing the number of
+"tough" blocks that require more hits. 
 
- * Idea #2
+ * Idea #2: The levels become increasingly challenging because the paddle gets smaller
 
 
 ## Class Ideas
@@ -91,4 +93,3 @@ This class might contain the method ".move" to move the ball around the scene.
 
  * Idea #4: A paddle class with various types of paddles such as larger paddles, which make it easier to play
  or paddles with different types of materials that make the ball bounce slower or faster.
-

@@ -9,11 +9,11 @@ This project implements the game of Breakout with multiple levels.
 
 ### Timeline
 
- * Start Date: 
+ * Start Date: Friday January 10th, 2025
 
  * Finish Date: 
 
- * Hours Spent:
+ * Hours Spent: 
 
 
 

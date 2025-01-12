@@ -1,5 +1,5 @@
 # Breakout Design
-## NAME
+## Alana Zinkin
 
 
 ## Design Goals

@@ -34,13 +34,11 @@ public class Main extends Application {
     // many resources may be in the same shared folder
     // note, leading slash means automatically start in "src/main/resources" folder
     // note, Java always uses forward slash, "/", (even for Windows)
-    public static final String RESOURCE_PATH = "/";
-    public static final String BALL_IMAGE = RESOURCE_PATH + "black-ball-image.jpg";
-    public static final int BOUNCER_SIZE = 30;
+    public static final int BOUNCER_SIZE = 20;
     public static final int PADDLE_HEIGHT = 20;
     public static final int PADDLE_WIDTH = 80;
-    public static final int BALL_XSPEED = 30;
-    public static final int BALL_YSPEED = 40;
+    public static final int BALL_XSPEED = 50;
+    public static final int BALL_YSPEED = 60;
     public static final int PADDLE_SPEED = 60;
     // scene contains all the shapes and has several useful methods
     private Scene myScene;
@@ -110,9 +108,6 @@ public class Main extends Application {
             return this.myBouncer;
         }
 
-
-
-
     }
 
     @Override
@@ -160,10 +155,15 @@ public class Main extends Application {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.setX(myBouncer.getX() + BALL_XSPEED * myXDirection * elapsedTime);
         myBouncer.setY(myBouncer.getY() + BALL_YSPEED * myYDirection * elapsedTime);
+        Shape intersection = Shape.intersect(myBouncer.getShape(), myPaddle);
+
         if (myBouncer.getX() >= SIZE || myBouncer.getX() <= 0) {
             myXDirection *= -1;
         }
         if (myBouncer.getY() >= SIZE || myBouncer.getY() <= 0) {
+            myYDirection *= -1;
+        }
+        if (intersection.getBoundsInLocal().getWidth() != -1) {
             myYDirection *= -1;
         }
 

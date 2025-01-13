@@ -44,6 +44,7 @@ public class Main extends Application {
     public static final int PADDLE_SPEED = 60;
     // scene contains all the shapes and has several useful methods
     private Scene myScene;
+    private Group root;
     private int myXDirection = 1;
     private int myYDirection = 1;
 
@@ -180,7 +181,7 @@ public class Main extends Application {
 
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
-        Group root = new Group(myBouncer.getShape(), myPaddle, myFirstBlock.getShape());
+        root = new Group(myBouncer.getShape(), myPaddle, myFirstBlock.getShape());
         // could also add them dynamically later
         //root.getChildren().add(myMover);
         //root.getChildren().add(myGrower);
@@ -196,7 +197,8 @@ public class Main extends Application {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.setX(myBouncer.getX() + BALL_XSPEED * myXDirection * elapsedTime);
         myBouncer.setY(myBouncer.getY() + BALL_YSPEED * myYDirection * elapsedTime);
-        Shape intersection = Shape.intersect(myBouncer.getShape(), myPaddle);
+        Shape paddleIntersection = Shape.intersect(myBouncer.getShape(), myPaddle);
+        Shape blockIntersection = Shape.intersect(myBouncer.getShape(), myFirstBlock.getShape());
 
         if (myBouncer.getX() >= SIZE || myBouncer.getX() <= 0) {
             myXDirection *= -1;
@@ -204,8 +206,12 @@ public class Main extends Application {
         if (myBouncer.getY() >= SIZE || myBouncer.getY() <= 0) {
             myYDirection *= -1;
         }
-        if (intersection.getBoundsInLocal().getWidth() != -1) {
+        if (paddleIntersection.getBoundsInLocal().getWidth() != -1) {
             myYDirection *= -1;
+        }
+        if (blockIntersection.getBoundsInLocal().getWidth() != -1) {
+            myYDirection *= -1;
+            root.getChildren().remove(myFirstBlock.getShape());
         }
 
     }

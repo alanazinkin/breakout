@@ -37,6 +37,8 @@ public class Main extends Application {
     public static final int BOUNCER_SIZE = 20;
     public static final int PADDLE_HEIGHT = 20;
     public static final int PADDLE_WIDTH = 80;
+    public static final int BLOCK_WIDTH = 80;
+    public static final int BLOCK_HEIGHT = 40;
     public static final int BALL_XSPEED = 50;
     public static final int BALL_YSPEED = 60;
     public static final int PADDLE_SPEED = 60;
@@ -50,6 +52,7 @@ public class Main extends Application {
      */
     private Bouncer myBouncer;
     private Rectangle myPaddle;
+    private Block myFirstBlock;
 
     public class Bouncer {
         private Shape myBouncer;
@@ -110,6 +113,41 @@ public class Main extends Application {
 
     }
 
+    public class Block {
+        Shape blockShape;
+
+        public Block(double length, double height, Color color) {
+            this.blockShape = new Rectangle(length, height, color);
+        }
+
+        public Block(double radius, Color color) {
+            this.blockShape = new Circle(radius, color);
+        }
+
+        public void setX(double x) {
+            if (blockShape instanceof Rectangle){
+                ((Rectangle) blockShape).setX(x);
+            }
+            else{
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+        }
+
+        public void setY(double y) {
+            if (blockShape instanceof Rectangle){
+                ((Rectangle) blockShape).setY(y);
+            }
+            else{
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        }
+
+        public Shape getShape(){
+            return this.blockShape;
+        }
+    }
+
     @Override
     public void start (Stage stage) {
         Circle shape = new Circle(200, 200, 40);
@@ -135,11 +173,14 @@ public class Main extends Application {
         myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 50, BOUNCER_SIZE, Color.BLACK);
         // x and y represent the top left corner, so center it in window
         myBouncer.setX(BOUNCER_SIZE);
-        // create paddle
         myPaddle = new Rectangle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
+        myFirstBlock = new Block(BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUEVIOLET);
+        myFirstBlock.setX(30);
+        myFirstBlock.setY(50);
+
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
-        Group root = new Group(myBouncer.getShape(), myPaddle);
+        Group root = new Group(myBouncer.getShape(), myPaddle, myFirstBlock.getShape());
         // could also add them dynamically later
         //root.getChildren().add(myMover);
         //root.getChildren().add(myGrower);

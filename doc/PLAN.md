@@ -40,6 +40,9 @@ small updates to the original breakout game.
 
  * Idea #2: V shaped paddle with two sides
 
+ * Idea #3: Each side of paddle (left, center, right) directs the ball in the
+corresponding direction
+
 
 ## Block Ideas
 

@@ -74,9 +74,6 @@ public class Main extends Application {
             if (myBouncer instanceof Circle){
                 ((Circle) myBouncer).setCenterX(x);
             }
-            else if (myBouncer instanceof Rectangle){
-                ((Rectangle) myBouncer).setX(x);
-            }
             else{
                 throw new UnsupportedOperationException("Not supported yet.");
             }
@@ -87,9 +84,6 @@ public class Main extends Application {
             if (myBouncer instanceof Circle){
                 ((Circle) myBouncer).setCenterY(y);
             }
-            else if (myBouncer instanceof Rectangle){
-                ((Rectangle) myBouncer).setY(y);
-            }
             else{
                 throw new UnsupportedOperationException("Not supported yet.");
             }
@@ -99,20 +93,15 @@ public class Main extends Application {
             if (myBouncer instanceof Circle){
                 return ((Circle) myBouncer).getCenterX();
             }
-            else if (myBouncer instanceof Rectangle){
-                return ((Rectangle) myBouncer).getX();
-            }
             else{
                 throw new UnsupportedOperationException("Not supported yet.");
             }
+
         }
 
         public double getY() {
             if (myBouncer instanceof Circle){
                 return ((Circle) myBouncer).getCenterY();
-            }
-            else if (myBouncer instanceof Rectangle){
-                return ((Rectangle) myBouncer).getY();
             }
             else{
                 throw new UnsupportedOperationException("Not supported yet.");

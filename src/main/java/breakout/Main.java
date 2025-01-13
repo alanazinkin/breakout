@@ -198,7 +198,14 @@ public class Main extends Application {
         myBouncer.setY(myBouncer.getY() + BALL_YSPEED * myYDirection * elapsedTime);
         Shape paddleIntersection = Shape.intersect(myBouncer.getShape(), myPaddle);
         Shape blockIntersection = Shape.intersect(myBouncer.getShape(), myFirstBlock.getShape());
-
+        // ensure paddle remains within screen bounds
+        if (myPaddle.getX() <= 0) {
+            myPaddle.setX(0);
+        }
+        if (myPaddle.getX() >= SIZE - PADDLE_WIDTH) {
+            myPaddle.setX(SIZE - PADDLE_WIDTH);
+        }
+        // make ball bounce within screen
         if (myBouncer.getX() >= SIZE || myBouncer.getX() <= 0) {
             myXDirection *= -1;
         }

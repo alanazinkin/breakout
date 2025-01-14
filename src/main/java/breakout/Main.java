@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 
 /**
  * Feel free to completely change this code or delete it entirely.
@@ -39,114 +40,24 @@ public class Main extends Application {
     public static final int PADDLE_WIDTH = 80;
     public static final int BLOCK_WIDTH = 80;
     public static final int BLOCK_HEIGHT = 40;
-    public static final int BALL_XSPEED = 50;
+    public static final int NUM_BLOCKS = 10;
+    public static final int BALL_XSPEED = 100;
     public static final int BALL_YSPEED = 60;
     public static final int PADDLE_SPEED = 60;
+
     // scene contains all the shapes and has several useful methods
     private Scene myScene;
     private Group root;
     private int myXDirection = 1;
-    private int myYDirection = 1;
+    private int myYDirection = -1;
 
     /**
      * Initialize what will be displayed.
      */
     private Bouncer myBouncer;
     private Rectangle myPaddle;
-    private Block myFirstBlock;
+    private ArrayList<Block> myBlocks = new ArrayList<>();
 
-    public class Bouncer {
-        private Shape myBouncer;
-
-        public Bouncer(Shape myShape) {
-            myBouncer = myShape;
-        }
-
-        public Bouncer(double centerX, double centerY, double radius, Color color) {
-            this.myBouncer = new Circle(centerX, centerY, radius, color);
-        }
-
-        public Bouncer(double length, double height, Color color) {
-            this.myBouncer = new Rectangle(length, height, color);
-        }
-
-        public void setX(double x) {
-            if (myBouncer instanceof Circle){
-                ((Circle) myBouncer).setCenterX(x);
-            }
-            else{
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-        }
-
-        public void setY(double y) {
-            if (myBouncer instanceof Circle){
-                ((Circle) myBouncer).setCenterY(y);
-            }
-            else{
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        }
-
-        public double getX() {
-            if (myBouncer instanceof Circle){
-                return ((Circle) myBouncer).getCenterX();
-            }
-            else{
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-        }
-
-        public double getY() {
-            if (myBouncer instanceof Circle){
-                return ((Circle) myBouncer).getCenterY();
-            }
-            else{
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        }
-
-        public Shape getShape(){
-            return this.myBouncer;
-        }
-
-    }
-
-    public class Block {
-        Shape blockShape;
-
-        public Block(double length, double height, Color color) {
-            this.blockShape = new Rectangle(length, height, color);
-        }
-
-        public Block(double radius, Color color) {
-            this.blockShape = new Circle(radius, color);
-        }
-
-        public void setX(double x) {
-            if (blockShape instanceof Rectangle){
-                ((Rectangle) blockShape).setX(x);
-            }
-            else{
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        }
-
-        public void setY(double y) {
-            if (blockShape instanceof Rectangle){
-                ((Rectangle) blockShape).setY(y);
-            }
-            else{
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        }
-
-        public Shape getShape(){
-            return this.blockShape;
-        }
-    }
 
     @Override
     public void start (Stage stage) {
@@ -170,17 +81,15 @@ public class Main extends Application {
     // Create the game's "scene": what shapes will be in the game and their starting properties
     public Scene setupScene (int width, int height, Paint background) {
         // make some shapes and set their properties
-        myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 50, BOUNCER_SIZE, Color.BLACK);
+        myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 60, BOUNCER_SIZE, Color.BLACK,
+                BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
         // x and y represent the top left corner, so center it in window
-        myBouncer.setX(BOUNCER_SIZE);
-        myPaddle = new Rectangle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
-        myFirstBlock = new Block(BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUEVIOLET);
-        myFirstBlock.setX(30);
-        myFirstBlock.setY(50);
 
+        myPaddle = new Rectangle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
-        root = new Group(myBouncer.getShape(), myPaddle, myFirstBlock.getShape());
+        root = new Group(myBouncer.getBouncer(), myPaddle);
+        Block.initBlocks(root, myBlocks, NUM_BLOCKS, BLOCK_WIDTH, BLOCK_HEIGHT);
         // could also add them dynamically later
         //root.getChildren().add(myMover);
         //root.getChildren().add(myGrower);
@@ -192,12 +101,12 @@ public class Main extends Application {
         return myScene;
     }
 
+    // portions of code from bounce lab
     private void step(double elapsedTime) {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
-        myBouncer.setX(myBouncer.getX() + BALL_XSPEED * myXDirection * elapsedTime);
-        myBouncer.setY(myBouncer.getY() + BALL_YSPEED * myYDirection * elapsedTime);
-        Shape paddleIntersection = Shape.intersect(myBouncer.getShape(), myPaddle);
-        Shape blockIntersection = Shape.intersect(myBouncer.getShape(), myFirstBlock.getShape());
+        myBouncer.move(elapsedTime);
+        collisionCheck();
+        myBouncer.paddleIntersect(myPaddle);
         // ensure paddle remains within screen bounds
         if (myPaddle.getX() <= 0) {
             myPaddle.setX(0);
@@ -206,19 +115,7 @@ public class Main extends Application {
             myPaddle.setX(SIZE - PADDLE_WIDTH);
         }
         // make ball bounce within screen
-        if (myBouncer.getX() >= SIZE || myBouncer.getX() <= 0) {
-            myXDirection *= -1;
-        }
-        if (myBouncer.getY() >= SIZE || myBouncer.getY() <= 0) {
-            myYDirection *= -1;
-        }
-        if (paddleIntersection.getBoundsInLocal().getWidth() != -1) {
-            myYDirection *= -1;
-        }
-        if (blockIntersection.getBoundsInLocal().getWidth() != -1) {
-            myYDirection *= -1;
-            root.getChildren().remove(myFirstBlock.getShape());
-        }
+        myBouncer.bounce(elapsedTime, SIZE, BOUNCER_SIZE);
 
     }
 
@@ -229,7 +126,7 @@ public class Main extends Application {
         switch (code) {
             case RIGHT -> myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
             case LEFT -> myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
-            case R -> myBouncer.setX(0);
+            case R -> myBouncer.getBouncer().setCenterX(0);
         }
         // TYPICAL way to do it, definitely more readable for longer actions
 //        if (code == KeyCode.RIGHT) {
@@ -244,6 +141,22 @@ public class Main extends Application {
 //        else if (code == KeyCode.DOWN) {
 //            myMover.setY(myMover.getY() + MOVER_SPEED);
 //        }
+    }
+
+    public void collisionCheck() {
+        for (int i = 0; i < NUM_BLOCKS; i++) {
+            Block block = myBlocks.get(i);
+            if (block != null){
+                Shape blockIntersection = Shape.intersect(myBouncer.getBouncer(), block.getBlock());
+                if (blockIntersection.getBoundsInLocal().getWidth() != -1) {
+                    myBouncer.setYDirection(myBouncer.getYDirection() * -1);
+                    root.getChildren().remove(block.getBlock());
+                    // temporary fix for removing blocks
+                    myBlocks.set(i, null);
+                }
+            }
+
+        }
     }
 
     public static void main (String[] args) {

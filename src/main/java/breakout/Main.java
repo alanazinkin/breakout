@@ -55,7 +55,7 @@ public class Main extends Application {
      * Initialize what will be displayed.
      */
     private Bouncer myBouncer;
-    private Rectangle myPaddle;
+    private Paddle myPaddle;
     private ArrayList<Block> myBlocks = new ArrayList<>();
 
 
@@ -85,10 +85,10 @@ public class Main extends Application {
                 BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
         // x and y represent the top left corner, so center it in window
 
-        myPaddle = new Rectangle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
+        myPaddle = new Paddle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
-        root = new Group(myBouncer.getBouncer(), myPaddle);
+        root = new Group(myBouncer.getBouncer(), myPaddle.getPaddle());
         Block.initBlocks(root, myBlocks, NUM_BLOCKS, BLOCK_WIDTH, BLOCK_HEIGHT);
         // could also add them dynamically later
         //root.getChildren().add(myMover);
@@ -106,14 +106,9 @@ public class Main extends Application {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
         collisionCheck();
-        myBouncer.paddleIntersect(myPaddle);
+        myBouncer.paddleIntersect(myPaddle.getPaddle());
         // ensure paddle remains within screen bounds
-        if (myPaddle.getX() <= 0) {
-            myPaddle.setX(0);
-        }
-        if (myPaddle.getX() >= SIZE - PADDLE_WIDTH) {
-            myPaddle.setX(SIZE - PADDLE_WIDTH);
-        }
+        myPaddle.keepInBounds(SIZE);
         // make ball bounce within screen
         myBouncer.bounce(elapsedTime, SIZE, BOUNCER_SIZE);
 
@@ -124,8 +119,8 @@ public class Main extends Application {
         // NOTE new Java syntax that some prefer (but watch out for the many special cases!)
         //   https://blog.jetbrains.com/idea/2019/02/java-12-and-intellij-idea/
         switch (code) {
-            case RIGHT -> myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
-            case LEFT -> myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
+            case RIGHT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() + PADDLE_SPEED);
+            case LEFT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() - PADDLE_SPEED);
             case R -> myBouncer.getBouncer().setCenterX(0);
         }
         // TYPICAL way to do it, definitely more readable for longer actions

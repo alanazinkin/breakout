@@ -49,7 +49,6 @@ public class Main extends Application {
     public static final int BALL_XSPEED = 100;
     public static final int BALL_YSPEED = 60;
     public static final int PADDLE_SPEED = 60;
-    public static final int LIVES = 3;
     public static final int LIVESX = 30;
     public static final int LIVESY = 370;
 
@@ -97,7 +96,8 @@ public class Main extends Application {
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
         // Display # of Lives
-        livesText = new Text(LIVESX, LIVESY, "Lives Left: " + LIVES);
+        Life myLives = new Life(3);
+        livesText = new Text(LIVESX, LIVESY, "Lives Left: " + myLives.getLives());
         livesText.setFill(Color.HOTPINK);
         Font f = Font.font("Lucida Bright", FontWeight.BOLD, 28);
         livesText.setFont(f);
@@ -124,6 +124,7 @@ public class Main extends Application {
         myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myPaddle.keepInBounds(SIZE);
         myBouncer.bounce(SIZE, BOUNCER_SIZE);
+        myBouncer.outOfBounds(SIZE, BOUNCER_SIZE);
 
         // check if all blocks have been hit to go to new level
         /*boolean allBlocksHit = true;
@@ -137,8 +138,6 @@ public class Main extends Application {
             setupScene(SIZE, SIZE, Color.WHITE);
         }
          */
-        myBouncer.outOfBounds(SIZE, BOUNCER_SIZE);
-
     }
 
     // What to do each time a key is pressed

@@ -50,13 +50,16 @@ public class Bouncer extends Circle {
         }
     }
 
-    public void outOfBounds(int screenSize, int bouncerSize) {
+    public boolean outOfBounds(int screenSize, int bouncerSize) {
         if (myBouncer.getCenterY() >= screenSize - bouncerSize - 10) {
-            myBouncer.setFill(Color.BLUE);
             myBouncer.setCenterX(screenSize / 2 - bouncerSize / 2);
             myBouncer.setCenterY(screenSize / 2 - bouncerSize / 2 + 60);
             myXDirection = 1;
             myYDirection = -1;
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

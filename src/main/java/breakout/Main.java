@@ -21,6 +21,8 @@ import javafx.stage.Stage;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import javafx.scene.text.Text;
+
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 /**
@@ -45,7 +47,6 @@ public class Main extends Application {
     public static final int PADDLE_WIDTH = 80;
     public static final int BLOCK_WIDTH = 80;
     public static final int BLOCK_HEIGHT = 40;
-    public static final int NUM_BLOCKS = 5;
     public static final int BALL_XSPEED = 100;
     public static final int BALL_YSPEED = 60;
     public static final int PADDLE_SPEED = 60;
@@ -58,14 +59,13 @@ public class Main extends Application {
     private Group root;
     private int myXDirection = 1;
     private int myYDirection = -1;
-    private int level = 1;
-
+    private Level myLevel = new Level(0);
+    private int numBlocks;
     /**
      * Initialize what will be displayed.
      */
     private Bouncer myBouncer;
     private Paddle myPaddle;
-    private ArrayList<Block> myBlocks = new ArrayList<>();
     private Text livesText;
     private Life myLives;
     // private ArrayList<Level> myLevels = new ArrayList<>();
@@ -74,7 +74,7 @@ public class Main extends Application {
     @Override
     public void start (Stage stage) {
 
-        Group root = new Group();
+        root = new Group();
 
         Scene myScene = setupScene(SIZE, SIZE, WHITE);
         stage.setScene(myScene);
@@ -96,6 +96,10 @@ public class Main extends Application {
         myPaddle = new Paddle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
+        myLevel.initBlocks(BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUE);
+        myLevel.setLevel(myLevel.getLevel() + 1);
+        System.out.println(myLevel.getBlocksList());
+
         // Display # of Lives
         myLives = new Life(3);
         livesText = new Text(LIVESX, LIVESY, "Lives Left: " + myLives.getLives());
@@ -105,12 +109,14 @@ public class Main extends Application {
 
         root = new Group(myBouncer.getBouncer(), myPaddle.getPaddle());
         root.getChildren().add(livesText);
-        Block.initBlocks(root, myBlocks, NUM_BLOCKS, BLOCK_WIDTH, BLOCK_HEIGHT);
+        //Block.initBlocks(root, myBlocks, NUM_BLOCKS, BLOCK_WIDTH, BLOCK_HEIGHT);
+
         // could also add them dynamically later
         //root.getChildren().add(myMover);
         //root.getChildren().add(myGrower);
         // create a place to see the shapes
         myScene = new Scene(root, width, height, background);
+        myLevel.startLevel(root);
         // respond to input
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         //REMOVE IF NEEDED: myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
@@ -171,15 +177,15 @@ public class Main extends Application {
     }
 
     public void collisionCheck() {
-        for (int i = 0; i < NUM_BLOCKS; i++) {
-            Block block = myBlocks.get(i);
+        for (int i = 0; i < myLevel.getNumBlocks(); i++) {
+            Block block = myLevel.getBlocksList().get(i);
             if (block != null){
                 Shape blockIntersection = Shape.intersect(myBouncer.getBouncer(), block.getBlock());
                 if (blockIntersection.getBoundsInLocal().getWidth() != -1) {
                     myBouncer.setYDirection(myBouncer.getYDirection() * -1);
                     root.getChildren().remove(block.getBlock());
                     // temporary fix for removing blocks
-                    myBlocks.set(i, null);
+                    myLevel.getBlocksList().set(i, null);
                 }
             }
 

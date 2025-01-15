@@ -26,7 +26,4 @@ public class Paddle {
         return Paddle;
     }
 
-    public int getHeight() {
-        return height;
-    }
-}
+ 

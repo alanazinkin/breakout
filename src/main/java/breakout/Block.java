@@ -8,7 +8,7 @@ import javafx.scene.shape.Shape;
 
 import java.lang.reflect.Array;
 
-public class Block extends Rectangle {
+public class Block {
     private Rectangle myBlock;
 
     public Block(int myX, int myY, double length, double height, Color color) {
@@ -16,14 +16,8 @@ public class Block extends Rectangle {
         myBlock.setFill(color);
     }
 
-    public static void initBlocks(Group root, ArrayList<Block> myBlocks, int numBlocks, int blockWidth, int blockHeight) {
-        int j = 0;
-        for (int i = 0; i < numBlocks; i++){
-            Block myBlock = new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, Color.BLUE);
-            myBlocks.add(myBlock);
-            root.getChildren().add(myBlock.getBlock());
-            j ++;
-        }
+    public String toString() {
+        return myBlock.toString();
     }
 
     public Rectangle getBlock() {

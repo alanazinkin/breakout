@@ -25,4 +25,8 @@ public class Paddle {
     public Rectangle getPaddle() {
         return Paddle;
     }
+
+    public int getHeight() {
+        return height;
+    }
 }

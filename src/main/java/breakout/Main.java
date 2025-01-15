@@ -1,21 +1,26 @@
 package breakout;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-
+import javafx.scene.text.Text;
 import java.util.ArrayList;
 
 /**
@@ -40,16 +45,21 @@ public class Main extends Application {
     public static final int PADDLE_WIDTH = 80;
     public static final int BLOCK_WIDTH = 80;
     public static final int BLOCK_HEIGHT = 40;
-    public static final int NUM_BLOCKS = 10;
+    public static final int NUM_BLOCKS = 5;
     public static final int BALL_XSPEED = 100;
     public static final int BALL_YSPEED = 60;
     public static final int PADDLE_SPEED = 60;
+    public static final int LIVES = 3;
+    public static final int LIVESX = 30;
+    public static final int LIVESY = 370;
+
 
     // scene contains all the shapes and has several useful methods
     private Scene myScene;
     private Group root;
     private int myXDirection = 1;
     private int myYDirection = -1;
+    private int level = 1;
 
     /**
      * Initialize what will be displayed.
@@ -57,15 +67,14 @@ public class Main extends Application {
     private Bouncer myBouncer;
     private Paddle myPaddle;
     private ArrayList<Block> myBlocks = new ArrayList<>();
+    private Text livesText;
+    // private ArrayList<Level> myLevels = new ArrayList<>();
 
 
     @Override
     public void start (Stage stage) {
-        Circle shape = new Circle(200, 200, 40);
-        shape.setFill(Color.LIGHTSTEELBLUE);
 
         Group root = new Group();
-        root.getChildren().add(shape);
 
         Scene myScene = setupScene(SIZE, SIZE, WHITE);
         stage.setScene(myScene);
@@ -84,11 +93,17 @@ public class Main extends Application {
         myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 60, BOUNCER_SIZE, Color.BLACK,
                 BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
         // x and y represent the top left corner, so center it in window
-
         myPaddle = new Paddle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
+        // Display # of Lives
+        livesText = new Text(LIVESX, LIVESY, "Lives Left: " + LIVES);
+        livesText.setFill(Color.HOTPINK);
+        Font f = Font.font("Lucida Bright", FontWeight.BOLD, 28);
+        livesText.setFont(f);
+
         root = new Group(myBouncer.getBouncer(), myPaddle.getPaddle());
+        root.getChildren().add(livesText);
         Block.initBlocks(root, myBlocks, NUM_BLOCKS, BLOCK_WIDTH, BLOCK_HEIGHT);
         // could also add them dynamically later
         //root.getChildren().add(myMover);
@@ -106,11 +121,23 @@ public class Main extends Application {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
         collisionCheck();
-        myBouncer.paddleIntersect(myPaddle.getPaddle());
-        // ensure paddle remains within screen bounds
+        myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myPaddle.keepInBounds(SIZE);
-        // make ball bounce within screen
-        myBouncer.bounce(elapsedTime, SIZE, BOUNCER_SIZE);
+        myBouncer.bounce(SIZE, BOUNCER_SIZE);
+
+        // check if all blocks have been hit to go to new level
+        /*boolean allBlocksHit = true;
+        for (Block block : myBlocks) {
+            if (block != null){
+                allBlocksHit = false;
+            }
+        }
+        if (allBlocksHit) {
+            myLevels.get(level).endLevel(root);
+            setupScene(SIZE, SIZE, Color.WHITE);
+        }
+         */
+        myBouncer.outOfBounds(SIZE, BOUNCER_SIZE);
 
     }
 

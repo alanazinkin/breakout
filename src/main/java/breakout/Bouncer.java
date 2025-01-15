@@ -5,23 +5,24 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.Scene;
 
 // bouncer class inspired from bounce lab
 public class Bouncer extends Circle {
     private Circle myBouncer;
-    private double radius;
+    private int size;
     private int myXSpeed;
     private int myYSpeed;
     private int myXDirection;
     private int myYDirection;
 
 
-    public Bouncer(double centerX, double centerY, double radius, Color color, int myXSpeed,
+    public Bouncer(double centerX, double centerY, int radius, Color color, int myXSpeed,
                    int myYSpeed, int myXDirection, int myYDirection) {
         myBouncer = new Circle(centerX, centerY, radius, color);
         myBouncer.setCenterX(centerX);
         myBouncer.setCenterY(centerY);
-        this.radius = radius;
+        this.size = radius;
         this.myXSpeed = myXSpeed;
         this.myYSpeed = myYSpeed;
         this.myXDirection = myXDirection;
@@ -33,7 +34,7 @@ public class Bouncer extends Circle {
         myBouncer.setCenterY(myBouncer.getCenterY() + this.myYSpeed * this.myYDirection * elapsedTime);
     }
 
-    public void bounce(double elapsedTime, int screenSize, int bouncerSize) {
+    public void bounce(int screenSize, int bouncerSize) {
         if (myBouncer.getCenterX() >= screenSize - bouncerSize || myBouncer.getCenterX() <= 0 + bouncerSize) {
             myXDirection *= -1;
         }
@@ -42,24 +43,45 @@ public class Bouncer extends Circle {
         }
     }
 
-    public void paddleIntersect(Rectangle paddle) {
+    public void paddleIntersect(Rectangle paddle, int size) {
         Shape paddleIntersection = Shape.intersect(myBouncer, paddle);
         if (paddleIntersection.getBoundsInLocal().getWidth() != -1) {
             myYDirection *= -1;
         }
     }
 
+    public void outOfBounds(int screenSize, int bouncerSize) {
+        if (myBouncer.getCenterY() >= screenSize - bouncerSize - 10) {
+            myBouncer.setFill(Color.BLUE);
+            myBouncer.setCenterX(screenSize / 2 - bouncerSize / 2);
+            myBouncer.setCenterY(screenSize / 2 - bouncerSize / 2 + 60);
+            myXDirection = 1;
+            myYDirection = -1;
+        }
+    }
+
+    public void setXDirection(int direction) {
+        myXDirection = direction;
+    }
+
     public void setYDirection(int direction) {
         myYDirection = direction;
+    }
+
+    public int getXDirection() {
+        return this.myXDirection;
     }
 
     public int getYDirection() {
         return this.myYDirection;
     }
 
-
     public Circle getBouncer() {
         return this.myBouncer;
+    }
+
+    public double getMySize() {
+        return this.size;
     }
 
 }

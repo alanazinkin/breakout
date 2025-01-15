@@ -67,6 +67,7 @@ public class Main extends Application {
     private Paddle myPaddle;
     private ArrayList<Block> myBlocks = new ArrayList<>();
     private Text livesText;
+    private Life myLives;
     // private ArrayList<Level> myLevels = new ArrayList<>();
 
 
@@ -96,7 +97,7 @@ public class Main extends Application {
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
         // Display # of Lives
-        Life myLives = new Life(3);
+        myLives = new Life(3);
         livesText = new Text(LIVESX, LIVESY, "Lives Left: " + myLives.getLives());
         livesText.setFill(Color.HOTPINK);
         Font f = Font.font("Lucida Bright", FontWeight.BOLD, 28);
@@ -125,6 +126,11 @@ public class Main extends Application {
         myPaddle.keepInBounds(SIZE);
         myBouncer.bounce(SIZE, BOUNCER_SIZE);
         myBouncer.outOfBounds(SIZE, BOUNCER_SIZE);
+        if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
+            myLives.decrementLives();
+            livesText.setText("Lives Left: " + myLives.getLives());
+        };
+
 
         // check if all blocks have been hit to go to new level
         /*boolean allBlocksHit = true;

@@ -16,6 +16,9 @@ public class Bouncer extends Circle {
     private int myXDirection;
     private int myYDirection;
 
+    final static int SPACE = 2;
+    final static int EXTRA_SPACE = 1;
+
 
     public Bouncer(double centerX, double centerY, int radius, Color color, int myXSpeed,
                    int myYSpeed, int myXDirection, int myYDirection) {
@@ -50,17 +53,17 @@ public class Bouncer extends Circle {
         }
     }
 
-    public boolean outOfBounds(int screenSize, int bouncerSize) {
-        if (myBouncer.getCenterY() >= screenSize - bouncerSize - 10) {
+    public void outOfBounds(int screenSize, int bouncerSize) {
+        if (myBouncer.getCenterY() >= screenSize - bouncerSize - EXTRA_SPACE) {
             myBouncer.setCenterX(screenSize / 2 - bouncerSize / 2);
             myBouncer.setCenterY(screenSize / 2 - bouncerSize / 2 + 60);
             myXDirection = 1;
             myYDirection = -1;
-            return true;
         }
-        else {
-            return false;
-        }
+    }
+
+    public boolean outTheBounds(int screenSize, int bouncerSize) {
+        return (myBouncer.getCenterY() >= screenSize - bouncerSize - SPACE);
     }
 
     public void setXDirection(int direction) {

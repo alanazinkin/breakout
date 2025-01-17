@@ -101,11 +101,11 @@ public class Main extends Application {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
         myGame.ballBouncesOut(myBouncer, myLives, myGameDisplay, SIZE);
-        collisionCheck();
-        myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myPaddle.keepInBounds(SIZE);
+        myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myBouncer.bounce(SIZE, BOUNCER_SIZE);
         myBouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
+        bouncerBrickCollisionCheck();
 
         // check if all blocks have been hit
         //TODO: wrap in method
@@ -151,7 +151,7 @@ public class Main extends Application {
 //        }
     }
 
-    public void collisionCheck() {
+    public void bouncerBrickCollisionCheck() {
         for (int i = 0; i < myLevel.getNumBlocks(); i++) {
             Block block = myLevel.getBlocksList().get(i);
             if (block != null){

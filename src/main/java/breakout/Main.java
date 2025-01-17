@@ -43,6 +43,7 @@ public class Main extends Application {
     // many resources may be in the same shared folder
     // note, leading slash means automatically start in "src/main/resources" folder
     // note, Java always uses forward slash, "/", (even for Windows)
+    private static final int NUMLEVELS = 4;
     public static final int BOUNCER_SIZE = 20;
     public static final int PADDLE_HEIGHT = 20;
     public static final int PADDLE_WIDTH = 80;
@@ -61,8 +62,6 @@ public class Main extends Application {
     private int myXDirection = 1;
     private int myYDirection = -1;
     private Level myLevel = new Level(0);
-    private int numLevels = 2;
-    private int numBlocks;
     /**
      * Initialize what will be displayed.
      */
@@ -91,8 +90,8 @@ public class Main extends Application {
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
     public Scene setupScene (Group root, int width, int height, Paint background) {
-        myGame = new Game(3);
-        myLevelFiles = myGame.makeLevelFileArray(numLevels);
+        myGame = new Game(NUMLEVELS);
+        myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
         // make some shapes and set their properties
         myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 60, BOUNCER_SIZE, Color.BLACK,
                 BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
@@ -137,6 +136,11 @@ public class Main extends Application {
         if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
             myLives.decrementLives();
             livesText.setText("Lives Left: " + myLives.getLives());
+        }
+
+        // check if all blocks have been hit OR no lives left
+        if (myLevel.allBlocksHit() || myLives.getLives() == 0){
+            myLevel.endLevel(root);
         }
 
 

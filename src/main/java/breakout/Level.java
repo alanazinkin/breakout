@@ -64,16 +64,8 @@ public class Level {
         root.getChildren().clear();
     }
 
-    public boolean allBlocksHit(Group root) {
-        boolean allBlocksHit = true;
-        for (Block block : this.blocks) {
-            if (block.getBlock() != null && root.getChildren().contains(block.getBlock())) {
-                allBlocksHit = false;
-                break;
-            }
-
-        }
-        return allBlocksHit;
+    public boolean allBlocksHit() {
+        return (hitBlocks.size() == blocks.size());
     }
 
     public void setLevel(int myLevel) {

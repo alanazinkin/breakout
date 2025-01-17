@@ -21,7 +21,6 @@ public class Life {
     }
 
 
-
     public void decrementLives() {
         lives --;
     }

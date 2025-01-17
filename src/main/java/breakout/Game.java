@@ -16,7 +16,7 @@ public class Game {
         alert.setTitle("Game Over");
         alert.setHeaderText(null); // No header
         alert.setContentText("Game Over!");
-        alert.showAndWait();
+        alert.show();
     }
 
     public String[] makeLevelFileArray(int numLevels) {

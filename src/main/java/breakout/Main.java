@@ -37,7 +37,7 @@ public class Main extends Application {
     public static final int BLOCK_WIDTH = 80;
     public static final int BLOCK_HEIGHT = 40;
     public static final int BALL_XSPEED = 120;
-    public static final int BALL_YSPEED = 80;
+    public static final int BALL_YSPEED = 160;
     public static final int PADDLE_SPEED = 60;
     public static final int LIVESX = 30;
     public static final int LIVESY = 370;
@@ -81,7 +81,6 @@ public class Main extends Application {
         myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
         // Display # of Lives
-        myLives = new Life(myLives.getLives());
         livesText = myLives.createLivesText(LIVESX, LIVESY, "Lucida Bright", 28);
 
         // could also add them dynamically later
@@ -100,17 +99,16 @@ public class Main extends Application {
     private void step(double elapsedTime) {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
+        if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
+            myBouncer.resetBouncer(SIZE, BOUNCER_SIZE);
+            myLives.decrementLives();
+            livesText.setText("Lives Left: " + myLives.getLives());
+        }
         collisionCheck();
         myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myPaddle.keepInBounds(SIZE);
         myBouncer.bounce(SIZE, BOUNCER_SIZE);
-        myBouncer.outOfBounds(SIZE, BOUNCER_SIZE);
-
-        // check if the player lost the bouncer
-        if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
-            myLives.decrementLives();
-            livesText.setText("Lives Left: " + myLives.getLives());
-        }
+        myBouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
 
         // check if all blocks have been hit
         if (myLevel.allBlocksHit()){
@@ -122,20 +120,6 @@ public class Main extends Application {
             myGame.endGame();
         }
 
-
-
-        // check if all blocks have been hit to go to new level
-        /*boolean allBlocksHit = true;
-        for (Block block : myBlocks) {
-            if (block != null){
-                allBlocksHit = false;
-            }
-        }
-        if (allBlocksHit) {
-            myLevels.get(level).endLevel(root);
-            setupScene(SIZE, SIZE, Color.WHITE);
-        }
-         */
     }
 
     // What to do each time a key is pressed

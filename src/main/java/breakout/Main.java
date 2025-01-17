@@ -45,6 +45,7 @@ public class Main extends Application {
     public static final int LEVELX = 30;
     public static final int LEVELY = 390;
     public static final int FONT_SIZE = 20;
+    public static final String TEXT_FONT = "Lucida Bright";
 
 
     // scene contains all the shapes and has several useful methods
@@ -57,10 +58,9 @@ public class Main extends Application {
      * Initialize what will be displayed.
      */
     private Game myGame;
+    private GameDisplay myGameDisplay = new GameDisplay();
     private Bouncer myBouncer;
     private Paddle myPaddle;
-    private Text livesText;
-    private Text levelText;
     private Life myLives = new Life(NUMLIVES);
     private String[] myLevelFiles;
 
@@ -85,9 +85,7 @@ public class Main extends Application {
     public Scene setupScene (Group root, int width, int height, Paint background) {
         myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
-        // Display # of Lives
-        livesText = myLives.createLivesText(LIVESX, LIVESY, "Lucida Bright", FONT_SIZE);
-
+        myGameDisplay.createGameStatusText(myLives, myLevel, myLives.getLives(), LIVESX, LIVESY, LEVELX, LEVELY, TEXT_FONT, FONT_SIZE);
         // could also add them dynamically later
         //root.getChildren().add(myMover);
         //root.getChildren().add(myGrower);
@@ -107,7 +105,7 @@ public class Main extends Application {
         if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
             myBouncer.resetBouncer(SIZE, BOUNCER_SIZE);
             myLives.decrementLives();
-            livesText.setText("Lives Left: " + myLives.getLives());
+            myGameDisplay.setLivesText("Lives Left: " + myLives.getLives());
         }
         collisionCheck();
         myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
@@ -181,16 +179,13 @@ public class Main extends Application {
         // order added to the group is the order in which they are drawn
         myLevel.initBlocks(myLevelFiles, BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUE);
         myLevel.addBlocksToScene(root);
-        // set current level
-
         root.getChildren().add(myBouncer.getBouncer());
         root.getChildren().add(myPaddle.getPaddle());
-        root.getChildren().add(livesText);
 
-        // update current level
         myLevel.setLevel(myLevel.getLevel() + 1);
-        levelText = myLevel.setLevelText(LEVELX, LEVELY, "Lucida Bright", FONT_SIZE);
-        root.getChildren().add(levelText);
+        // add Level and Life game display
+        myGameDisplay.displayGameStatusTextElements(root, myGameDisplay.getMyText());
+        myGameDisplay.updateGameStatusTextForNewLevel(myLevel);
     }
 
     public static void main (String[] args) {

@@ -1,6 +1,8 @@
 package breakout;
 
+import javafx.scene.Group;
 import javafx.scene.control.Alert;
+import javafx.scene.paint.Color;
 
 public class Game {
     int numLevels;

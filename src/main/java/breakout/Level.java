@@ -7,6 +7,9 @@ import java.util.Scanner;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 public class Level {
     ArrayList<Block> blocks;
@@ -69,6 +72,14 @@ public class Level {
 
     public boolean allBlocksHit() {
         return (hitBlocks.size() == blocks.size());
+    }
+
+    public Text setLevelText(int xPosition, int yPosition, String font, int fontSize) {
+        Text levelText = new Text(xPosition, yPosition, "Current Level: " + myLevel);
+        levelText.setFill(Color.HOTPINK);
+        Font f = Font.font(font, FontWeight.BOLD, fontSize);
+        levelText.setFont(f);
+        return levelText;
     }
 
     public void setLevel(int myLevel) {

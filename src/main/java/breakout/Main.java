@@ -40,8 +40,11 @@ public class Main extends Application {
     public static final int BALL_YSPEED = 160;
     public static final int PADDLE_SPEED = 60;
     public static final int LIVESX = 30;
-    public static final int LIVESY = 370;
+    public static final int LIVESY = 360;
     public static final int NUMLIVES = 3;
+    public static final int LEVELX = 30;
+    public static final int LEVELY = 390;
+    public static final int FONT_SIZE = 20;
 
 
     // scene contains all the shapes and has several useful methods
@@ -57,8 +60,10 @@ public class Main extends Application {
     private Bouncer myBouncer;
     private Paddle myPaddle;
     private Text livesText;
+    private Text levelText;
     private Life myLives = new Life(NUMLIVES);
     private String[] myLevelFiles;
+
 
 
     @Override
@@ -81,7 +86,7 @@ public class Main extends Application {
         myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
         // Display # of Lives
-        livesText = myLives.createLivesText(LIVESX, LIVESY, "Lucida Bright", 28);
+        livesText = myLives.createLivesText(LIVESX, LIVESY, "Lucida Bright", FONT_SIZE);
 
         // could also add them dynamically later
         //root.getChildren().add(myMover);
@@ -179,6 +184,8 @@ public class Main extends Application {
 
         // update current level
         myLevel.setLevel(myLevel.getLevel() + 1);
+        levelText = myLevel.setLevelText(LEVELX, LEVELY, "Lucida Bright", FONT_SIZE);
+        root.getChildren().add(levelText);
     }
 
     public static void main (String[] args) {

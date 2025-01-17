@@ -77,7 +77,7 @@ public class Main extends Application {
         // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY)));
+        animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY, animation)));
         animation.play();
     }
 
@@ -101,7 +101,7 @@ public class Main extends Application {
     }
 
     // portions of code from bounce lab
-    private void step(double elapsedTime) {
+    private void step(double elapsedTime, Timeline animation) {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
         if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
@@ -121,7 +121,12 @@ public class Main extends Application {
             addRelevantItemsToScene(root, SIZE, SIZE);
         }
         // check if out of lives?
-        myLives.outOfLives(myGame);
+        myLives.outOfLives(myGame, animation);
+
+        //check if there are more levels
+        if (myLevel.getLevel() >= NUMLEVELS){
+            myGame.winGame();
+        };
 
     }
 

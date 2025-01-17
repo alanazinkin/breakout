@@ -1,5 +1,6 @@
 package breakout;
 
+import javafx.animation.Timeline;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -37,9 +38,10 @@ public class Life {
         lives += amount;
     }
 
-    public void outOfLives(Game myGame) {
+    public void outOfLives(Game myGame, Timeline timeline) {
         if (lives <= 0) {
-            myGame.endGame();
+            timeline.pause();
+            myGame.loseGame();
         }
     }
 

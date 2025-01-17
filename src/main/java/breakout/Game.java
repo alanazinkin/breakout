@@ -1,8 +1,6 @@
 package breakout;
 
-import javafx.scene.Group;
 import javafx.scene.control.Alert;
-import javafx.scene.paint.Color;
 
 public class Game {
     int numLevels;
@@ -13,11 +11,19 @@ public class Game {
         this.numLevels = numLevels;
     }
 
-    public void endGame() {
+    public void loseGame() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Over");
         alert.setHeaderText(null); // No header
         alert.setContentText("Game Over!");
+        alert.show();
+    }
+
+    public void winGame() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Won");
+        alert.setHeaderText(null);
+        alert.setContentText("You won!");
         alert.show();
     }
 

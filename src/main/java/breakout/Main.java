@@ -139,9 +139,11 @@ public class Main extends Application {
         }
 
         // check if all blocks have been hit OR no lives left
-        if (myLevel.allBlocksHit() || myLives.getLives() == 0){
+        if (myLevel.allBlocksHit()){
             myLevel.endLevel(root);
         }
+
+
 
 
 

@@ -27,6 +27,14 @@ public class Game {
         alert.show();
     }
 
+    public void ballBouncesOut(Bouncer myBouncer, Life myLives, GameDisplay myGameDisplay, int screenSize) {
+        if (myBouncer.outTheBounds(screenSize, myBouncer.getMySize())) {
+            myBouncer.resetBouncer(screenSize, myBouncer.getMySize());
+            myLives.decrementLives();
+            myGameDisplay.setLivesText("Lives Left: " + myLives.getLives());
+        }
+    }
+
     public String[] makeLevelFileArray(int numLevels) {
         String[] myLevelFiles = new String[numLevels];
         for (int i = 0; i < numLevels; i++) {

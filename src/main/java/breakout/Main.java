@@ -100,12 +100,7 @@ public class Main extends Application {
     private void step(double elapsedTime, Timeline animation) {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
-        //TODO: wrap in method
-        if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
-            myBouncer.resetBouncer(SIZE, BOUNCER_SIZE);
-            myLives.decrementLives();
-            myGameDisplay.setLivesText("Lives Left: " + myLives.getLives());
-        }
+        myGame.ballBouncesOut(myBouncer, myLives, myGameDisplay, SIZE);
         collisionCheck();
         myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myPaddle.keepInBounds(SIZE);

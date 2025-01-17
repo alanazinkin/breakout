@@ -18,12 +18,12 @@ public class Bouncer extends Circle {
     final static int EXTRA_SPACE = 1;
 
 
-    public Bouncer(double centerX, double centerY, int radius, Color color, int myXSpeed,
+    public Bouncer(double centerX, double centerY, int size, Color color, int myXSpeed,
                    int myYSpeed, int myXDirection, int myYDirection) {
-        myBouncer = new Circle(centerX, centerY, radius, color);
+        myBouncer = new Circle(centerX, centerY, size, color);
         myBouncer.setCenterX(centerX);
         myBouncer.setCenterY(centerY);
-        this.size = radius;
+        this.size = size;
         this.myXSpeed = myXSpeed;
         this.myYSpeed = myYSpeed;
         this.myXDirection = myXDirection;
@@ -92,8 +92,8 @@ public class Bouncer extends Circle {
         return this.myBouncer;
     }
 
-    public double getMySize() {
-        return this.size;
+    public int getMySize() {
+        return size;
     }
 
 }

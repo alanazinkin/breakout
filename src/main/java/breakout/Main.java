@@ -48,12 +48,11 @@ public class Main extends Application {
     public static final int PADDLE_WIDTH = 80;
     public static final int BLOCK_WIDTH = 80;
     public static final int BLOCK_HEIGHT = 40;
-    public static final int BALL_XSPEED = 100;
-    public static final int BALL_YSPEED = 60;
+    public static final int BALL_XSPEED = 120;
+    public static final int BALL_YSPEED = 80;
     public static final int PADDLE_SPEED = 60;
     public static final int LIVESX = 30;
     public static final int LIVESY = 370;
-    public static final String LEVELFILE_PATH = "src/main/resources/";
 
 
     // scene contains all the shapes and has several useful methods
@@ -67,11 +66,12 @@ public class Main extends Application {
     /**
      * Initialize what will be displayed.
      */
+    private Game myGame;
     private Bouncer myBouncer;
     private Paddle myPaddle;
     private Text livesText;
     private Life myLives;
-    private String[] myLevelFiles = makeLevelFileArray(numLevels);
+    private String[] myLevelFiles;
 
 
     @Override
@@ -91,6 +91,8 @@ public class Main extends Application {
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
     public Scene setupScene (Group root, int width, int height, Paint background) {
+        myGame = new Game(3);
+        myLevelFiles = myGame.makeLevelFileArray(numLevels);
         // make some shapes and set their properties
         myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 60, BOUNCER_SIZE, Color.BLACK,
                 BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
@@ -104,10 +106,7 @@ public class Main extends Application {
 
         // Display # of Lives
         myLives = new Life(3);
-        livesText = new Text(LIVESX, LIVESY, "Lives Left: " + myLives.getLives());
-        livesText.setFill(Color.HOTPINK);
-        Font f = Font.font("Lucida Bright", FontWeight.BOLD, 28);
-        livesText.setFont(f);
+        livesText = myLives.createLivesText(LIVESX, LIVESY, "Lucida Bright", 28);
 
         root.getChildren().add(myBouncer.getBouncer());
         root.getChildren().add(myPaddle.getPaddle());
@@ -178,15 +177,6 @@ public class Main extends Application {
 //        else if (code == KeyCode.DOWN) {
 //            myMover.setY(myMover.getY() + MOVER_SPEED);
 //        }
-    }
-
-    public String[] makeLevelFileArray(int numLevels) {
-        String[] myLevelFiles = new String[numLevels + 1];
-        for (int i = 0; i < numLevels; i++) {
-            String fileName = LEVELFILE_PATH + "lvl_" + i + ".txt";
-            myLevelFiles[i] = fileName;
-        }
-        return myLevelFiles;
     }
 
     public void collisionCheck() {

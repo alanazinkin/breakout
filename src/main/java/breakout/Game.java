@@ -1,0 +1,20 @@
+package breakout;
+
+public class Game {
+    int numLevels;
+
+    public static final String LEVELFILE_PATH = "src/main/resources/";
+
+    public Game(int numLevels) {
+        this.numLevels = numLevels;
+    }
+
+    public String[] makeLevelFileArray(int numLevels) {
+        String[] myLevelFiles = new String[numLevels + 1];
+        for (int i = 0; i < numLevels; i++) {
+            String fileName = LEVELFILE_PATH + "lvl_" + i + ".txt";
+            myLevelFiles[i] = fileName;
+        }
+        return myLevelFiles;
+    }
+}

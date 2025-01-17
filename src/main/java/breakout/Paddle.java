@@ -6,8 +6,6 @@ import javafx.scene.shape.Shape;
 
 public class Paddle {
     private Rectangle Paddle;
-    private int width;
-    private int height;
 
     public Paddle(double x, double y, double width, double height) {
         Paddle = new Rectangle(x, y, width, height);
@@ -17,8 +15,8 @@ public class Paddle {
         if (Paddle.getX() <= 0) {
             Paddle.setX(0);
         }
-        if (Paddle.getX() >= size - width) {
-            Paddle.setX(size - height);
+        if (Paddle.getX()  >= size - Paddle.getWidth()) {
+            Paddle.setX(size - Paddle.getWidth());
         }
     }
 
@@ -26,7 +24,4 @@ public class Paddle {
         return Paddle;
     }
 
-    public int getHeight() {
-        return height;
-    }
 }

@@ -1,30 +1,17 @@
 package breakout;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import javafx.scene.text.Text;
-
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Feel free to completely change this code or delete it entirely.
@@ -54,6 +41,7 @@ public class Main extends Application {
     public static final int PADDLE_SPEED = 60;
     public static final int LIVESX = 30;
     public static final int LIVESY = 370;
+    public static final int NUMLIVES = 3;
 
 
     // scene contains all the shapes and has several useful methods
@@ -69,7 +57,7 @@ public class Main extends Application {
     private Bouncer myBouncer;
     private Paddle myPaddle;
     private Text livesText;
-    private Life myLives;
+    private Life myLives = new Life(NUMLIVES);
     private String[] myLevelFiles;
 
 
@@ -92,32 +80,16 @@ public class Main extends Application {
     public Scene setupScene (Group root, int width, int height, Paint background) {
         myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
-        // make some shapes and set their properties
-        myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 60, BOUNCER_SIZE, Color.BLACK,
-                BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
-        // x and y represent the top left corner, so center it in window
-        myPaddle = new Paddle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
-        // create one top level collection to organize the things in the scene
-        // order added to the group is the order in which they are drawn
-        myLevel.initBlocks(myLevelFiles, BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUE);
-        myLevel.setLevel(myLevel.getLevel() + 1);
-        System.out.println(myLevel.getBlocksList());
-
         // Display # of Lives
-        myLives = new Life(3);
+        myLives = new Life(myLives.getLives());
         livesText = myLives.createLivesText(LIVESX, LIVESY, "Lucida Bright", 28);
-
-        root.getChildren().add(myBouncer.getBouncer());
-        root.getChildren().add(myPaddle.getPaddle());
-        root.getChildren().add(livesText);
-        //Block.initBlocks(root, myBlocks, NUM_BLOCKS, BLOCK_WIDTH, BLOCK_HEIGHT);
 
         // could also add them dynamically later
         //root.getChildren().add(myMover);
         //root.getChildren().add(myGrower);
         // create a place to see the shapes
+        addRelevantItemsToScene(root, width, height);
         myScene = new Scene(root, width, height, background);
-        myLevel.startLevel(root);
         // respond to input
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         //REMOVE IF NEEDED: myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
@@ -133,17 +105,22 @@ public class Main extends Application {
         myPaddle.keepInBounds(SIZE);
         myBouncer.bounce(SIZE, BOUNCER_SIZE);
         myBouncer.outOfBounds(SIZE, BOUNCER_SIZE);
+
+        // check if the player lost the bouncer
         if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
             myLives.decrementLives();
             livesText.setText("Lives Left: " + myLives.getLives());
         }
 
-        // check if all blocks have been hit OR no lives left
+        // check if all blocks have been hit
         if (myLevel.allBlocksHit()){
             myLevel.endLevel(root);
+            addRelevantItemsToScene(root, SIZE, SIZE);
         }
-
-
+        // check if out of lives
+        if (myLives.getLives() <= 0) {
+            myGame.endGame();
+        }
 
 
 
@@ -202,8 +179,29 @@ public class Main extends Application {
         }
     }
 
+    public void addRelevantItemsToScene(Group root, int width, int height) {
+        // make some shapes and set their properties
+        myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 60, BOUNCER_SIZE, Color.BLACK,
+                BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
+        // x and y represent the top left corner, so center it in window
+        myPaddle = new Paddle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
+        // create one top level collection to organize the things in the scene
+        // order added to the group is the order in which they are drawn
+        myLevel.initBlocks(myLevelFiles, BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUE);
+        myLevel.addBlocksToScene(root);
+        // set current level
+
+        root.getChildren().add(myBouncer.getBouncer());
+        root.getChildren().add(myPaddle.getPaddle());
+        root.getChildren().add(livesText);
+
+        // update current level
+        myLevel.setLevel(myLevel.getLevel() + 1);
+    }
+
     public static void main (String[] args) {
         launch(args);
+
     }
 
 }

@@ -1,5 +1,7 @@
 package breakout;
 
+import javafx.scene.control.Alert;
+
 public class Game {
     int numLevels;
 
@@ -7,6 +9,14 @@ public class Game {
 
     public Game(int numLevels) {
         this.numLevels = numLevels;
+    }
+
+    public void endGame() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText(null); // No header
+        alert.setContentText("Game Over!");
+        alert.showAndWait();
     }
 
     public String[] makeLevelFileArray(int numLevels) {

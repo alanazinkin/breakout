@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.Scene;
-import javafx.scene.shape.Shape;
 
 public class Level {
     ArrayList<Block> blocks;
@@ -54,14 +52,19 @@ public class Level {
             e.printStackTrace();
         }
     }
-    public void startLevel(Group root) {
-        for (Block myBlock : this.blocks) {
+    public void addBlocksToScene(Group root) {
+        for (Block myBlock : blocks) {
             root.getChildren().add(myBlock.getBlock());
         }
     }
 
     public void endLevel(Group root) {
         root.getChildren().clear();
+        clearBlocksList();
+    }
+
+    public void clearBlocksList() {
+        this.blocks.clear();
     }
 
     public boolean allBlocksHit() {

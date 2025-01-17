@@ -28,7 +28,7 @@ public class Game {
     }
 
     public String[] makeLevelFileArray(int numLevels) {
-        String[] myLevelFiles = new String[numLevels + 1];
+        String[] myLevelFiles = new String[numLevels];
         for (int i = 0; i < numLevels; i++) {
             String fileName = LEVELFILE_PATH + "lvl_" + i + ".txt";
             myLevelFiles[i] = fileName;

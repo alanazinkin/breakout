@@ -64,10 +64,15 @@ public class Level {
     public void endLevel(Group root) {
         root.getChildren().clear();
         clearBlocksList();
+        clearHitBlocksList();
     }
 
     public void clearBlocksList() {
         this.blocks.clear();
+    }
+
+    public void clearHitBlocksList() {
+        this.hitBlocks.clear();
     }
 
     public boolean allBlocksHit() {

@@ -30,7 +30,7 @@ public class Main extends Application {
     // many resources may be in the same shared folder
     // note, leading slash means automatically start in "src/main/resources" folder
     // note, Java always uses forward slash, "/", (even for Windows)
-    private static final int NUMLEVELS = 4;
+    private static final int NUMLEVELS = 2;
     public static final int BOUNCER_SIZE = 20;
     public static final int PADDLE_HEIGHT = 20;
     public static final int PADDLE_WIDTH = 80;
@@ -86,9 +86,7 @@ public class Main extends Application {
         myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
         myGameDisplay.createGameStatusText(myLives, myLevel, myLives.getLives(), LIVESX, LIVESY, LEVELX, LEVELY, TEXT_FONT, FONT_SIZE);
-        // could also add them dynamically later
-        //root.getChildren().add(myMover);
-        //root.getChildren().add(myGrower);
+        myLevel.setLevel(myLevel.getLevel());
         // create a place to see the shapes
         addRelevantItemsToScene(root, width, height);
         myScene = new Scene(root, width, height, background);
@@ -102,6 +100,7 @@ public class Main extends Application {
     private void step(double elapsedTime, Timeline animation) {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
+        //TODO: wrap in method
         if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
             myBouncer.resetBouncer(SIZE, BOUNCER_SIZE);
             myLives.decrementLives();
@@ -114,17 +113,22 @@ public class Main extends Application {
         myBouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
 
         // check if all blocks have been hit
+        //TODO: wrap in method
         if (myLevel.allBlocksHit()){
             myLevel.endLevel(root);
-            addRelevantItemsToScene(root, SIZE, SIZE);
+            myLevel.setLevel(myLevel.getLevel() + 1);
+            //check if there are more levels
+            if (myLevel.getLevel() >= NUMLEVELS){
+                myGame.winGame();
+            }
+            else {
+                addRelevantItemsToScene(root, SIZE, SIZE);
+            }
         }
         // check if out of lives?
         myLives.outOfLives(myGame, animation);
 
-        //check if there are more levels
-        if (myLevel.getLevel() >= NUMLEVELS){
-            myGame.winGame();
-        };
+
 
     }
 
@@ -181,8 +185,6 @@ public class Main extends Application {
         myLevel.addBlocksToScene(root);
         root.getChildren().add(myBouncer.getBouncer());
         root.getChildren().add(myPaddle.getPaddle());
-
-        myLevel.setLevel(myLevel.getLevel() + 1);
         // add Level and Life game display
         myGameDisplay.displayGameStatusTextElements(root, myGameDisplay.getMyText());
         myGameDisplay.updateGameStatusTextForNewLevel(myLevel);

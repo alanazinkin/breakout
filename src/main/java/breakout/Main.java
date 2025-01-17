@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Feel free to completely change this code or delete it entirely.
@@ -52,6 +53,7 @@ public class Main extends Application {
     public static final int PADDLE_SPEED = 60;
     public static final int LIVESX = 30;
     public static final int LIVESY = 370;
+    public static final String LEVELFILE_PATH = "src/main/resources/";
 
 
     // scene contains all the shapes and has several useful methods
@@ -60,6 +62,7 @@ public class Main extends Application {
     private int myXDirection = 1;
     private int myYDirection = -1;
     private Level myLevel = new Level(0);
+    private int numLevels = 2;
     private int numBlocks;
     /**
      * Initialize what will be displayed.
@@ -68,15 +71,14 @@ public class Main extends Application {
     private Paddle myPaddle;
     private Text livesText;
     private Life myLives;
-    // private ArrayList<Level> myLevels = new ArrayList<>();
+    private String[] myLevelFiles = makeLevelFileArray(numLevels);
 
 
     @Override
     public void start (Stage stage) {
 
         root = new Group();
-
-        Scene myScene = setupScene(SIZE, SIZE, WHITE);
+        Scene myScene = setupScene(root, SIZE, SIZE, WHITE);
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -88,7 +90,7 @@ public class Main extends Application {
     }
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
-    public Scene setupScene (int width, int height, Paint background) {
+    public Scene setupScene (Group root, int width, int height, Paint background) {
         // make some shapes and set their properties
         myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 60, BOUNCER_SIZE, Color.BLACK,
                 BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
@@ -96,7 +98,7 @@ public class Main extends Application {
         myPaddle = new Paddle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
-        myLevel.initBlocks(BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUE);
+        myLevel.initBlocks(myLevelFiles, BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUE);
         myLevel.setLevel(myLevel.getLevel() + 1);
         System.out.println(myLevel.getBlocksList());
 
@@ -107,7 +109,8 @@ public class Main extends Application {
         Font f = Font.font("Lucida Bright", FontWeight.BOLD, 28);
         livesText.setFont(f);
 
-        root = new Group(myBouncer.getBouncer(), myPaddle.getPaddle());
+        root.getChildren().add(myBouncer.getBouncer());
+        root.getChildren().add(myPaddle.getPaddle());
         root.getChildren().add(livesText);
         //Block.initBlocks(root, myBlocks, NUM_BLOCKS, BLOCK_WIDTH, BLOCK_HEIGHT);
 
@@ -135,7 +138,8 @@ public class Main extends Application {
         if (myBouncer.outTheBounds(SIZE, BOUNCER_SIZE)) {
             myLives.decrementLives();
             livesText.setText("Lives Left: " + myLives.getLives());
-        };
+        }
+
 
 
         // check if all blocks have been hit to go to new level
@@ -176,6 +180,15 @@ public class Main extends Application {
 //        }
     }
 
+    public String[] makeLevelFileArray(int numLevels) {
+        String[] myLevelFiles = new String[numLevels + 1];
+        for (int i = 0; i < numLevels; i++) {
+            String fileName = LEVELFILE_PATH + "lvl_" + i + ".txt";
+            myLevelFiles[i] = fileName;
+        }
+        return myLevelFiles;
+    }
+
     public void collisionCheck() {
         for (int i = 0; i < myLevel.getNumBlocks(); i++) {
             Block block = myLevel.getBlocksList().get(i);
@@ -184,6 +197,7 @@ public class Main extends Application {
                 if (blockIntersection.getBoundsInLocal().getWidth() != -1) {
                     myBouncer.setYDirection(myBouncer.getYDirection() * -1);
                     root.getChildren().remove(block.getBlock());
+                    myLevel.addHitBlocks(block);
                     // temporary fix for removing blocks
                     myLevel.getBlocksList().set(i, null);
                 }

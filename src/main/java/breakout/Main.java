@@ -116,9 +116,7 @@ public class Main extends Application {
             addRelevantItemsToScene(root, SIZE, SIZE);
         }
         // check if out of lives?
-        if (myLives.getLives() <= 0) {
-            myGame.endGame();
-        }
+        myLives.outOfLives(myGame);
 
     }
 

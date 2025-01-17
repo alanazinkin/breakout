@@ -37,6 +37,12 @@ public class Life {
         lives += amount;
     }
 
+    public void outOfLives(Game myGame) {
+        if (lives <= 0) {
+            myGame.endGame();
+        }
+    }
+
     public int getLives() {
         return lives;
     }

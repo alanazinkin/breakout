@@ -46,6 +46,8 @@ public class Main extends Application {
     public static final int LEVELY = 390;
     public static final int FONT_SIZE = 20;
     public static final String TEXT_FONT = "Lucida Bright";
+    public static final int SPLASHSCREEN_WIDTH = 300;
+    public static final int SPLASHSCREEN_HEIGHT = 250;
 
 
     // scene contains all the shapes and has several useful methods
@@ -63,6 +65,8 @@ public class Main extends Application {
     private Paddle myPaddle;
     private Life myLives = new Life(NUMLIVES);
     private String[] myLevelFiles;
+    private SplashScreen myLevelSplashScreen = new SplashScreen();
+    private Stage newLevelStage;
 
 
 
@@ -117,8 +121,13 @@ public class Main extends Application {
                 myGame.winGame();
             }
             else {
+                animation.pause();
+                newLevelStage = new Stage();
+                Scene levelScene = myLevelSplashScreen.showSplashScreen(newLevelStage, myLevel);
                 addRelevantItemsToScene(root, SIZE, SIZE);
+                myLevelSplashScreen.handleSplashScreenEvent(levelScene, newLevelStage, animation);
             }
+
         }
         // check if out of lives?
         myLives.outOfLives(myGame, animation);

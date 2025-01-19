@@ -81,7 +81,7 @@ public class Level {
         return (hitBlocks.size() == blocks.size());
     }
 
-    public Text createLevelText(int xPosition, int yPosition, String font, int fontSize) {
+    public Text createLevelText(double xPosition, double yPosition, String font, int fontSize) {
         Text levelText = new Text(xPosition, yPosition, "Current Level: " + myLevel);
         levelText.setFill(Color.HOTPINK);
         Font f = Font.font(font, FontWeight.BOLD, fontSize);

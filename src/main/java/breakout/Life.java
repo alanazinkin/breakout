@@ -6,6 +6,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import static breakout.Main.SIZE;
+
 public class Life {
     private int lives;
 
@@ -13,7 +15,7 @@ public class Life {
         this.lives = lives;
     }
 
-    public Text createLivesText(int xPosition, int yPosition, String font, int fontSize) {
+    public Text createLivesText(double xPosition, double yPosition, String font, int fontSize) {
         Text livesText = new Text(xPosition, yPosition, "Lives Left: " + lives);
         System.out.println(livesText.getText());
         livesText.setFill(Color.HOTPINK);

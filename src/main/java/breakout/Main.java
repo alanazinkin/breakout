@@ -20,7 +20,7 @@ public class Main extends Application {
     // useful names for constant values used
     public static final String TITLE = "Example JavaFX Animation";
     public static final Color WHITE = new Color(1, 1, 1, 1);
-    public static final int SIZE = 400;
+    public static final int SIZE = 600;
     public static final int FRAMES_PER_SECOND = 60;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
@@ -37,11 +37,11 @@ public class Main extends Application {
     public static final int BALL_XSPEED = 120;
     public static final int BALL_YSPEED = 160;
     public static final int PADDLE_SPEED = 60;
-    public static final int LIVESX = 30;
-    public static final int LIVESY = 360;
+    public static final double LIVESX = (double) SIZE / 20;
+    public static final double LIVESY = (double) SIZE / (1.05);
     public static final int NUMLIVES = 3;
-    public static final int LEVELX = 30;
-    public static final int LEVELY = 390;
+    public static final double LEVELX = (double) SIZE / 20;
+    public static final double LEVELY = (double) SIZE / (1.12);
     public static final int FONT_SIZE = 20;
     public static final String TEXT_FONT = "Lucida Bright";
     public static final int SPLASHSCREEN_WIDTH = 300;
@@ -64,6 +64,7 @@ public class Main extends Application {
     private Life myLives = new Life(NUMLIVES);
     private String[] myLevelFiles;
     private SplashScreen myLevelSplashScreen = new SplashScreen();
+    private SplashScreen myGameRulesSplashScreen = new SplashScreen();
     private Stage stage;
 
 
@@ -80,7 +81,13 @@ public class Main extends Application {
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY, animation)));
-        animation.play();
+        Stage gameStage = new Stage();
+        Scene myGameScene = myGameRulesSplashScreen.showSplashScreen(gameStage, "Game Rules", "Game Rules:\n" +
+                "Move the paddle left and right\n" +
+                " to destroy all bricks without\n" +
+                " letting the ball drop.\n " +
+                "Good Luck!");
+        myGameRulesSplashScreen.handleSplashScreenEvent(myGameScene, gameStage, animation);
     }
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
@@ -118,7 +125,6 @@ public class Main extends Application {
             advanceLevel(animation);
         }
         myGameDisplay.updateGameStatusText(myLives, myLevel);
-
         // check if out of lives?
         myLives.outOfLives(myGame, animation);
     }

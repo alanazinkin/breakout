@@ -135,7 +135,6 @@ public class Main extends Application {
             highScore = Math.max(myScore.getScore(), highScore);
             advanceLevel(animation);
         }
-        // check if out of lives?
         if (myLives.outOfLives(myGame, animation)){
             myLevel.endLevel(root);
             myGame.loseGame(animation, myLevel, highScore);

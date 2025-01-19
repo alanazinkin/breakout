@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+import static breakout.Main.LOSE_LIFE_SCORE;
+
 public class Game {
     int numLevels;
 
@@ -32,11 +34,12 @@ public class Game {
         gameWonSplashScreen.handleSplashScreenEvent(levelScene, gameWonStage, animation);
     }
 
-    public void ballBouncesOut(Bouncer myBouncer, Life myLives, Level myLevel, GameDisplay myGameDisplay, int screenSize) {
+    public void ballBouncesOut(Bouncer myBouncer, Life myLives, Level myLevel, GameDisplay myGameDisplay, Score myScore, int screenSize) {
         if (myBouncer.outTheBounds(screenSize, myBouncer.getMySize())) {
             myBouncer.resetBouncer(screenSize, myBouncer.getMySize());
             myLives.decrementLives();
-            myGameDisplay.updateGameStatusText(myLives, myLevel);
+            myScore.decreaseScore(LOSE_LIFE_SCORE);
+            myGameDisplay.updateGameStatusText(myScore, myLives, myLevel);
         }
     }
 

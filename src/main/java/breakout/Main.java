@@ -42,10 +42,15 @@ public class Main extends Application {
     public static final int NUMLIVES = 1;
     public static final double LEVELX = (double) SIZE / 20;
     public static final double LEVELY = (double) SIZE / (1.12);
+    public static final double SCOREX = (double) SIZE / 20;
+    public static final double SCOREY = (double) SIZE / (1.2);
     public static final int FONT_SIZE = 20;
     public static final String TEXT_FONT = "Lucida Bright";
     public static final int SPLASHSCREEN_WIDTH = 300;
     public static final int SPLASHSCREEN_HEIGHT = 250;
+    public static final int LEVEL_SCORE = 10;
+    public static final int LOSE_LIFE_SCORE = 2;
+    public static final int HIT_BRICK_SCORE = 1;
 
 
     // scene contains all the shapes and has several useful methods
@@ -58,6 +63,7 @@ public class Main extends Application {
      * Initialize what will be displayed.
      */
     private Game myGame;
+    private Score myScore;
     private GameDisplay myGameDisplay = new GameDisplay();
     private Bouncer myBouncer;
     private Paddle myPaddle;
@@ -99,9 +105,10 @@ public class Main extends Application {
     }
 
     private void startGame() {
+        myScore = new Score(0);
         myLives.setLives(NUMLIVES);
         myLevel.setLevel(0);
-        myGameDisplay.createGameStatusText(root, myLives, myLevel, TEXT_FONT, FONT_SIZE);
+        myGameDisplay.createGameStatusText(root, myLives, myLevel, myScore, TEXT_FONT, FONT_SIZE);
         myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
         addRelevantItemsToScene();
@@ -111,20 +118,21 @@ public class Main extends Application {
     private void step(double elapsedTime, Timeline animation) {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
-        myGame.ballBouncesOut(myBouncer, myLives, myLevel, myGameDisplay, SIZE);
+        myGame.ballBouncesOut(myBouncer, myLives, myLevel, myGameDisplay, myScore, SIZE);
         myPaddle.keepInBounds(SIZE);
         myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myBouncer.bounce(SIZE, BOUNCER_SIZE);
         myBouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
         bouncerBrickCollisionCheck();
+        myGameDisplay.updateGameStatusText(myScore, myLives, myLevel);
 
         // check if all blocks have been hit
         //TODO: wrap in method
         if (myLevel.allBlocksHit()) {
             animation.pause();
+            myScore.increaseScore(LEVEL_SCORE);
             advanceLevel(animation);
         }
-        myGameDisplay.updateGameStatusText(myLives, myLevel);
         // check if out of lives?
         if (myLives.outOfLives(myGame, animation)){
             myLevel.endLevel(root);
@@ -144,7 +152,7 @@ public class Main extends Application {
             Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "New Level Splash Screen", "Level " + myLevel.getLevel() + " Complete!");
             levelStage.setScene(levelScene);
             addRelevantItemsToScene();
-            myGameDisplay.createGameStatusText(root, myLives, myLevel, TEXT_FONT, FONT_SIZE);
+            myGameDisplay.createGameStatusText(root, myLives, myLevel, myScore, TEXT_FONT, FONT_SIZE);
             myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
         }
     }
@@ -179,10 +187,10 @@ public class Main extends Application {
             if (block != null){
                 Shape blockIntersection = Shape.intersect(myBouncer.getBouncer(), block.getBlock());
                 if (blockIntersection.getBoundsInLocal().getWidth() != -1) {
+                    myScore.increaseScore(HIT_BRICK_SCORE);
                     myBouncer.setYDirection(myBouncer.getYDirection() * -1);
                     root.getChildren().remove(block.getBlock());
                     myLevel.addHitBlocks(block);
-                    // temporary fix for removing blocks
                     myLevel.getBlocksList().set(i, null);
                 }
             }

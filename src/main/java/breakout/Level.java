@@ -65,6 +65,8 @@ public class Level {
         root.getChildren().clear();
         clearBlocksList();
         clearHitBlocksList();
+        myLevel++;
+        System.out.println("Level " + myLevel);
     }
 
     public void clearBlocksList() {

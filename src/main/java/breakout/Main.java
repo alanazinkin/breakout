@@ -7,11 +7,9 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.text.Text;
 
 /**
  * Feel free to completely change this code or delete it entirely.
@@ -66,15 +64,15 @@ public class Main extends Application {
     private Life myLives = new Life(NUMLIVES);
     private String[] myLevelFiles;
     private SplashScreen myLevelSplashScreen = new SplashScreen();
-    private Stage newLevelStage;
+    private Stage stage;
 
 
 
     @Override
     public void start (Stage stage) {
-
+        this.stage = stage;
         root = new Group();
-        Scene myScene = setupScene(root, SIZE, SIZE, WHITE);
+        myScene = setupScene();
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -86,25 +84,27 @@ public class Main extends Application {
     }
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
-    public Scene setupScene (Group root, int width, int height, Paint background) {
+    public Scene setupScene () {
+        startGame();
+        myScene = new Scene(root, SIZE, SIZE, WHITE);
+        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        return myScene;
+    }
+
+    private void startGame() {
+        myLives.setLives(NUMLIVES);
+        myLevel.setLevel(0);
+        myGameDisplay.createGameStatusText(root, myLives, myLevel, TEXT_FONT, FONT_SIZE);
         myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
-        myGameDisplay.createGameStatusText(myLives, myLevel, myLives.getLives(), LIVESX, LIVESY, LEVELX, LEVELY, TEXT_FONT, FONT_SIZE);
-        myLevel.setLevel(myLevel.getLevel());
-        // create a place to see the shapes
-        addRelevantItemsToScene(root, width, height);
-        myScene = new Scene(root, width, height, background);
-        // respond to input
-        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        //REMOVE IF NEEDED: myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
-        return myScene;
+        addRelevantItemsToScene();
     }
 
     // portions of code from bounce lab
     private void step(double elapsedTime, Timeline animation) {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
-        myGame.ballBouncesOut(myBouncer, myLives, myGameDisplay, SIZE);
+        myGame.ballBouncesOut(myBouncer, myLives, myLevel, myGameDisplay, SIZE);
         myPaddle.keepInBounds(SIZE);
         myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myBouncer.bounce(SIZE, BOUNCER_SIZE);
@@ -113,27 +113,31 @@ public class Main extends Application {
 
         // check if all blocks have been hit
         //TODO: wrap in method
-        if (myLevel.allBlocksHit()){
-            myLevel.endLevel(root);
-            myLevel.setLevel(myLevel.getLevel() + 1);
-            //check if there are more levels
-            if (myLevel.getLevel() >= NUMLEVELS){
-                myGame.winGame();
-            }
-            else {
-                animation.pause();
-                newLevelStage = new Stage();
-                Scene levelScene = myLevelSplashScreen.showSplashScreen(newLevelStage, myLevel);
-                addRelevantItemsToScene(root, SIZE, SIZE);
-                myLevelSplashScreen.handleSplashScreenEvent(levelScene, newLevelStage, animation);
-            }
-
+        if (myLevel.allBlocksHit()) {
+            animation.pause();
+            advanceLevel(animation);
         }
+        myGameDisplay.updateGameStatusText(myLives, myLevel);
+
         // check if out of lives?
         myLives.outOfLives(myGame, animation);
+    }
 
-
-
+    private void advanceLevel(Timeline animation) {
+        myLevel.endLevel(root);
+        Stage levelStage = new Stage();
+        if (myLevel.getLevel()==NUMLEVELS) {
+            startGame();
+            Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "Restart Splash Screen", "You Won! Restart!");
+            myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
+        }
+        else {
+            Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "New Level Splash Screen", "Level " + myLevel.getLevel() + " Complete!");
+            levelStage.setScene(levelScene);
+            addRelevantItemsToScene();
+            myGameDisplay.createGameStatusText(root, myLives, myLevel, TEXT_FONT, FONT_SIZE);
+            myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
+        }
     }
 
     // What to do each time a key is pressed
@@ -177,12 +181,12 @@ public class Main extends Application {
         }
     }
 
-    public void addRelevantItemsToScene(Group root, int width, int height) {
+    public void addRelevantItemsToScene() {
         // make some shapes and set their properties
-        myBouncer = new Bouncer(width / 2 - BOUNCER_SIZE / 2, height / 2 + 60, BOUNCER_SIZE, Color.BLACK,
+        myBouncer = new Bouncer(SIZE / 2 - BOUNCER_SIZE / 2, SIZE / 2 + 60, BOUNCER_SIZE, Color.BLACK,
                 BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
         // x and y represent the top left corner, so center it in window
-        myPaddle = new Paddle(width / 2 - PADDLE_WIDTH/ 2, height / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
+        myPaddle = new Paddle(SIZE / 2 - PADDLE_WIDTH/ 2, SIZE / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
         myLevel.initBlocks(myLevelFiles, BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUE);
@@ -190,8 +194,6 @@ public class Main extends Application {
         root.getChildren().add(myBouncer.getBouncer());
         root.getChildren().add(myPaddle.getPaddle());
         // add Level and Life game display
-        myGameDisplay.displayGameStatusTextElements(root, myGameDisplay.getMyText());
-        myGameDisplay.updateGameStatusTextForNewLevel(myLevel);
     }
 
     public static void main (String[] args) {

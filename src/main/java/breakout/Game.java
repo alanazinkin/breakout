@@ -27,11 +27,11 @@ public class Game {
         alert.show();
     }
 
-    public void ballBouncesOut(Bouncer myBouncer, Life myLives, GameDisplay myGameDisplay, int screenSize) {
+    public void ballBouncesOut(Bouncer myBouncer, Life myLives, Level myLevel, GameDisplay myGameDisplay, int screenSize) {
         if (myBouncer.outTheBounds(screenSize, myBouncer.getMySize())) {
             myBouncer.resetBouncer(screenSize, myBouncer.getMySize());
             myLives.decrementLives();
-            myGameDisplay.setLivesText("Lives Left: " + myLives.getLives());
+            myGameDisplay.updateGameStatusText(myLives, myLevel);
         }
     }
 

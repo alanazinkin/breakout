@@ -15,10 +15,9 @@ public class SplashScreen {
     }
 
     //TODO: make font size a magic number
-    public Scene showSplashScreen(Stage primaryStage, Level myLevel) {
-        primaryStage.setTitle("New Level Splash Screen");
-        int currentLevel = myLevel.getLevel() - 1;
-        Text nextLevelText = new Text("Level " + currentLevel + " Complete!");
+    public Scene showSplashScreen(Stage primaryStage, String title, String text) {
+        primaryStage.setTitle(title);
+        Text nextLevelText = new Text(text);
         nextLevelText.setFont(Font.font(24));
 
 

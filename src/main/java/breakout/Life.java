@@ -15,6 +15,7 @@ public class Life {
 
     public Text createLivesText(int xPosition, int yPosition, String font, int fontSize) {
         Text livesText = new Text(xPosition, yPosition, "Lives Left: " + lives);
+        System.out.println(livesText.getText());
         livesText.setFill(Color.HOTPINK);
         Font f = Font.font(font, FontWeight.BOLD, fontSize);
         livesText.setFont(f);

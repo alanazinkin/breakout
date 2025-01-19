@@ -11,6 +11,8 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.List;
+
 /**
  * Feel free to completely change this code or delete it entirely.
  *
@@ -59,11 +61,9 @@ public class Main extends Application {
     private int myXDirection = 1;
     private int myYDirection = -1;
     private Level myLevel = new Level(0);
-    /**
-     * Initialize what will be displayed.
-     */
     private Game myGame;
     private Score myScore;
+    private int highScore;
     private GameDisplay myGameDisplay = new GameDisplay();
     private Bouncer myBouncer;
     private Paddle myPaddle;
@@ -94,6 +94,7 @@ public class Main extends Application {
                 " letting the ball drop.\n " +
                 "Good Luck!");
         myGameRulesSplashScreen.handleSplashScreenEvent(myGameScene, gameStage, animation);
+        highScore = 0;
     }
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
@@ -131,12 +132,13 @@ public class Main extends Application {
         if (myLevel.allBlocksHit()) {
             animation.pause();
             myScore.increaseScore(LEVEL_SCORE);
+            highScore = Math.max(myScore.getScore(), highScore);
             advanceLevel(animation);
         }
         // check if out of lives?
         if (myLives.outOfLives(myGame, animation)){
             myLevel.endLevel(root);
-            myGame.loseGame(animation, myLevel);
+            myGame.loseGame(animation, myLevel, highScore);
             startGame();
         };
     }
@@ -144,8 +146,8 @@ public class Main extends Application {
     private void advanceLevel(Timeline animation) {
         myLevel.endLevel(root);
         Stage levelStage = new Stage();
-        if (myLevel.getLevel()==NUMLEVELS) {
-            myGame.winGame(animation, myLives);
+        if (myLevel.getLevel() == NUMLEVELS) {
+            myGame.winGame(animation, myLives, highScore);
             startGame();
         }
         else {
@@ -188,6 +190,7 @@ public class Main extends Application {
                 Shape blockIntersection = Shape.intersect(myBouncer.getBouncer(), block.getBlock());
                 if (blockIntersection.getBoundsInLocal().getWidth() != -1) {
                     myScore.increaseScore(HIT_BRICK_SCORE);
+                    highScore = Math.max(myScore.getScore(), highScore);
                     myBouncer.setYDirection(myBouncer.getYDirection() * -1);
                     root.getChildren().remove(block.getBlock());
                     myLevel.addHitBlocks(block);

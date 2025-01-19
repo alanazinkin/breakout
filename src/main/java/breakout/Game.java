@@ -16,21 +16,21 @@ public class Game {
         this.numLevels = numLevels;
     }
 
-    public void loseGame(Timeline animation, Level myLevel) {
+    public void loseGame(Timeline animation, Level myLevel, int highScore) {
         Stage gameOverStage = new Stage();
         SplashScreen gameOverSplashScreen = new SplashScreen();
         animation.pause();
         Scene levelScene = gameOverSplashScreen.showSplashScreen(gameOverStage, "Game Over Splash Screen", "Game Over!\n" +
-                "Final Level: " + myLevel.getLevel() + "\nPress Any Key to Restart!");
+                "Final Level: " + myLevel.getLevel() + "\nHigh Score: " + highScore + "\nPress Any Key to Restart!");
         gameOverSplashScreen.handleSplashScreenEvent(levelScene, gameOverStage, animation);
     }
 
-    public void winGame(Timeline animation, Life myLives) {
+    public void winGame(Timeline animation, Life myLives, int highScore) {
         Stage gameWonStage = new Stage();
         SplashScreen gameWonSplashScreen = new SplashScreen();
         animation.pause();
         Scene levelScene = gameWonSplashScreen.showSplashScreen(gameWonStage, "Game Won Splash Screen", "You Won!\n" +
-                "Lives Remaining: " + myLives.getLives() + "\nPress Any Key to Play Again!");
+                "Lives Remaining: " + myLives.getLives() + "\nHigh Score: " + highScore + "\nPress Any Key to Play Again!");
         gameWonSplashScreen.handleSplashScreenEvent(levelScene, gameWonStage, animation);
     }
 

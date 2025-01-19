@@ -39,7 +39,7 @@ public class Main extends Application {
     public static final int PADDLE_SPEED = 60;
     public static final double LIVESX = (double) SIZE / 20;
     public static final double LIVESY = (double) SIZE / (1.05);
-    public static final int NUMLIVES = 3;
+    public static final int NUMLIVES = 1;
     public static final double LEVELX = (double) SIZE / 20;
     public static final double LEVELY = (double) SIZE / (1.12);
     public static final int FONT_SIZE = 20;
@@ -126,16 +126,19 @@ public class Main extends Application {
         }
         myGameDisplay.updateGameStatusText(myLives, myLevel);
         // check if out of lives?
-        myLives.outOfLives(myGame, animation);
+        if (myLives.outOfLives(myGame, animation)){
+            myLevel.endLevel(root);
+            myGame.loseGame(animation, myLevel);
+            startGame();
+        };
     }
 
     private void advanceLevel(Timeline animation) {
         myLevel.endLevel(root);
         Stage levelStage = new Stage();
         if (myLevel.getLevel()==NUMLEVELS) {
+            myGame.winGame(animation, myLives);
             startGame();
-            Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "Restart Splash Screen", "You Won! Restart!");
-            myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
         }
         else {
             Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "New Level Splash Screen", "Level " + myLevel.getLevel() + " Complete!");

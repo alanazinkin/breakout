@@ -1,6 +1,9 @@
 package breakout;
 
+import javafx.animation.Timeline;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 
 public class Game {
     int numLevels;
@@ -11,20 +14,22 @@ public class Game {
         this.numLevels = numLevels;
     }
 
-    public void loseGame() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText(null); // No header
-        alert.setContentText("Game Over!");
-        alert.show();
+    public void loseGame(Timeline animation, Level myLevel) {
+        Stage gameOverStage = new Stage();
+        SplashScreen gameOverSplashScreen = new SplashScreen();
+        animation.pause();
+        Scene levelScene = gameOverSplashScreen.showSplashScreen(gameOverStage, "Game Over Splash Screen", "Game Over!\n" +
+                "Final Level: " + myLevel.getLevel() + "\nPress Any Key to Restart!");
+        gameOverSplashScreen.handleSplashScreenEvent(levelScene, gameOverStage, animation);
     }
 
-    public void winGame() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Won");
-        alert.setHeaderText(null);
-        alert.setContentText("You won!");
-        alert.show();
+    public void winGame(Timeline animation, Life myLives) {
+        Stage gameWonStage = new Stage();
+        SplashScreen gameWonSplashScreen = new SplashScreen();
+        animation.pause();
+        Scene levelScene = gameWonSplashScreen.showSplashScreen(gameWonStage, "Game Won Splash Screen", "You Won!\n" +
+                "Lives Remaining: " + myLives.getLives() + "\nPress Any Key to Play Again!");
+        gameWonSplashScreen.handleSplashScreenEvent(levelScene, gameWonStage, animation);
     }
 
     public void ballBouncesOut(Bouncer myBouncer, Life myLives, Level myLevel, GameDisplay myGameDisplay, int screenSize) {

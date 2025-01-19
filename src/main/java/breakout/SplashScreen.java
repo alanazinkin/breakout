@@ -32,17 +32,9 @@ public class SplashScreen {
         return scene;
     }
 
-
-    public void closeSplashScreenAndResumePlay(Stage stage, Timeline timeline) {
-        stage.close();
-        timeline.play();
-    }
-
-
     public void handleSplashScreenEvent(Scene myStage, Stage newStage, Timeline animation) {
         myStage.setOnKeyPressed(event -> {
             closeSplashScreenAndResumePlay(newStage, animation);
-            System.out.println("Key pressed");
         });
         myStage.setOnMouseClicked(event -> {
             closeSplashScreenAndResumePlay(newStage, animation);
@@ -50,6 +42,27 @@ public class SplashScreen {
         newStage.setOnCloseRequest((WindowEvent event) -> {
             closeSplashScreenAndResumePlay(newStage, animation);
         });
+    }
+
+    public void closeSplashScreenAndResumePlay(Stage stage, Timeline timeline) {
+        stage.close();
+        timeline.play();
+    }
+
+    public void handleGameOverEvent(Scene myStage, Stage newStage, Timeline animation) {
+        myStage.setOnKeyPressed(event -> {
+            closeSplashScreen(newStage);
+        });
+        myStage.setOnMouseClicked(event -> {
+            closeSplashScreen(newStage);
+        });
+        newStage.setOnCloseRequest((WindowEvent event) -> {
+            closeSplashScreen(newStage);
+        });
+    }
+
+    public void closeSplashScreen(Stage stage) {
+        stage.close();
     }
 }
 

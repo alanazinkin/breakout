@@ -6,8 +6,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import static breakout.Main.SIZE;
-
 public class Life {
     private int lives;
 
@@ -41,11 +39,13 @@ public class Life {
         lives += amount;
     }
 
-    public void outOfLives(Game myGame, Timeline timeline) {
+    public boolean outOfLives(Game myGame, Timeline timeline) {
         if (lives <= 0) {
-            timeline.pause();
-            myGame.loseGame();
+            //timeline.pause();
+            //myGame.loseGame(timeline);
+            return true;
         }
+        return false;
     }
 
     public int getLives() {

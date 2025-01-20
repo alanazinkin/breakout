@@ -60,6 +60,7 @@ public class Main extends Application {
     // scene contains all the shapes and has several useful methods
     private Scene myScene;
     private Group root;
+    private Timeline animation;
     private int myXDirection = 1;
     private int myYDirection = -1;
     private Level myLevel = new Level(0);
@@ -87,9 +88,9 @@ public class Main extends Application {
         stage.setTitle(TITLE);
         stage.show();
         // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)
-        Timeline animation = new Timeline();
+        animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY, animation)));
+        animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY)));
         Stage gameStage = new Stage();
         Scene myGameScene = myGameRulesSplashScreen.showSplashScreen(gameStage, "Game Rules", "Game Rules:\n" +
                 "Move the paddle left and right\n" + " to destroy all bricks without\n" + " letting the ball drop.\n " +
@@ -117,7 +118,7 @@ public class Main extends Application {
     }
 
     // portions of code from bounce lab
-    private void step(double elapsedTime, Timeline animation) {
+    private void step(double elapsedTime) {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
         myBouncer.bounce(SIZE, BOUNCER_SIZE);
@@ -130,15 +131,19 @@ public class Main extends Application {
         // check if all blocks have been hit
         //TODO: wrap in method
         if (myLevel.allBlocksHit()) {
-            animation.pause();
-            updateHighScore(LEVEL_SCORE);
-            advanceLevel(animation);
+            goToNextLevel();
         }
         if (myLives.outOfLives(myGame, animation)){
             myLevel.endLevel(root);
             myGame.loseGame(animation, myLevel, highScore);
             startGame();
         }
+    }
+
+    private void goToNextLevel() {
+        animation.pause();
+        updateHighScore(LEVEL_SCORE);
+        advanceLevel(animation);
     }
 
     private void advanceLevel(Timeline animation) {
@@ -166,6 +171,7 @@ public class Main extends Application {
             case LEFT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() - PADDLE_SPEED);
             case R -> myPaddle.resetPaddle();
             case BACK_SPACE -> myLives.incrementLives();
+            case S -> goToNextLevel();
         }
         // TYPICAL way to do it, definitely more readable for longer actions
 //        if (code == KeyCode.RIGHT) {

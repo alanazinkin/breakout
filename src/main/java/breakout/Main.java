@@ -165,6 +165,7 @@ public class Main extends Application {
             case RIGHT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() + PADDLE_SPEED);
             case LEFT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() - PADDLE_SPEED);
             case R -> myBouncer.getBouncer().setCenterX(0);
+            case BACK_SPACE -> myLives.incrementLives();
         }
         // TYPICAL way to do it, definitely more readable for longer actions
 //        if (code == KeyCode.RIGHT) {

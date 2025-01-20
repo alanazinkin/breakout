@@ -162,7 +162,6 @@ public class Main extends Application {
         }
     }
 
-    // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {
         // NOTE new Java syntax that some prefer (but watch out for the many special cases!)
         //   https://blog.jetbrains.com/idea/2019/02/java-12-and-intellij-idea/
@@ -173,20 +172,8 @@ public class Main extends Application {
             case BACK_SPACE -> myLives.incrementLives();
             case S -> goToNextLevel();
             case TAB -> myBouncer.setYDirection(myBouncer.getYDirection() * -1);
+            case U -> myBouncer.setXDirection(myBouncer.getXDirection() * -1);
         }
-        // TYPICAL way to do it, definitely more readable for longer actions
-//        if (code == KeyCode.RIGHT) {
-//            myMover.setX(myMover.getX() + MOVER_SPEED);
-//        }
-//        else if (code == KeyCode.LEFT) {
-//            myMover.setX(myMover.getX() - MOVER_SPEED);
-//        }
-//        else if (code == KeyCode.UP) {
-//            myMover.setY(myMover.getY() - MOVER_SPEED);
-//        }
-//        else if (code == KeyCode.DOWN) {
-//            myMover.setY(myMover.getY() + MOVER_SPEED);
-//        }
     }
 
     public void checkForBrickCollision(double elapsedTime) {

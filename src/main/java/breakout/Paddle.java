@@ -20,6 +20,10 @@ public class Paddle {
         }
     }
 
+    public void expandPaddleLength(int width) {
+        Paddle.setWidth(width);
+    }
+
     public Rectangle getPaddle() {
         return Paddle;
     }

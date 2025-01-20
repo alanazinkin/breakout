@@ -21,18 +21,18 @@ public class Level {
     }
 
 
-    public void initBlocks(String[] myLevelFiles, int blockWidth, int blockHeight, Color blockColor) {
+    public void initBlocks(String[] myLevelFiles, Color[] colorMapping, int blockWidth, int blockHeight, Color blockColor) {
         String levelFile = myLevelFiles[myLevel];
         File myLayoutFile = new File(levelFile);
         blocks = new ArrayList<Block>();
-        readLevelFile(myLayoutFile, blockWidth, blockHeight);
+        readLevelFile(myLayoutFile, colorMapping, blockWidth, blockHeight);
     }
 
     public String getLevelFile(String[] myLevelFiles, int level, String levelFile) {
         return (myLevelFiles[level]);
     }
 
-    public void readLevelFile(File myLayoutFile, int blockWidth, int blockHeight) {
+    public void readLevelFile(File myLayoutFile, Color[] colorMapping, int blockWidth, int blockHeight) {
         try {
             Scanner s = new Scanner(myLayoutFile);
             int j = 0;
@@ -42,9 +42,9 @@ public class Level {
                 for (int i = 0; i < split.length; i++) {
                     switch(split[i]) {
                         case "0": continue;
-                        case "1": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, Color.BLUE));
+                        case "1": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[1], 1));
                             break;
-                        case "2": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, Color.HOTPINK));
+                        case "2": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[2], 2));
                     }
                 }
                 j += 1;

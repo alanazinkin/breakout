@@ -20,17 +20,11 @@ import static javafx.scene.paint.Color.PURPLE;
  * @author Alana Zinkin
  */
 public class Main extends Application {
-    // useful names for constant values used
     public static final String TITLE = "Example JavaFX Animation";
     public static final Color WHITE = new Color(1, 1, 1, 1);
     public static final int SIZE = 600;
     public static final int FRAMES_PER_SECOND = 60;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-
-
-    // many resources may be in the same shared folder
-    // note, leading slash means automatically start in "src/main/resources" folder
-    // note, Java always uses forward slash, "/", (even for Windows)
     private static final int NUMLEVELS = 3;
     public static final int BOUNCER_SIZE = 20;
     public static final int PADDLE_HEIGHT = 20;
@@ -49,13 +43,9 @@ public class Main extends Application {
     public static final double SCOREY = (double) SIZE / (1.2);
     public static final int FONT_SIZE = 20;
     public static final String TEXT_FONT = "Lucida Bright";
-    public static final int SPLASHSCREEN_WIDTH = 300;
-    public static final int SPLASHSCREEN_HEIGHT = 250;
     public static final int LEVEL_SCORE = 10;
     public static final int LOSE_LIFE_SCORE = 2;
-    public static final int HIT_BRICK_SCORE = 1;
     public static final double COOLDOWN_TIME = 0.2;
-
 
     // scene contains all the shapes and has several useful methods
     private Scene myScene;
@@ -81,16 +71,8 @@ public class Main extends Application {
 
     @Override
     public void start (Stage stage) {
-        this.stage = stage;
-        root = new Group();
-        myScene = setupScene();
-        stage.setScene(myScene);
-        stage.setTitle(TITLE);
-        stage.show();
-        // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)
-        animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY)));
+        makeStage(stage);
+        makeGameLoop();
         Stage gameStage = new Stage();
         Scene myGameScene = myGameRulesSplashScreen.showSplashScreen(gameStage, "Game Rules", "Game Rules:\n" +
                 "Move the paddle left and right\n" + " to destroy all bricks without\n" + " letting the ball drop.\n " +
@@ -99,22 +81,37 @@ public class Main extends Application {
         highScore = 0;
     }
 
+    private void makeGameLoop() {
+        animation = new Timeline();
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY)));
+    }
+
+    private void makeStage(Stage stage) {
+        this.stage = stage;
+        root = new Group();
+        myScene = setupScene();
+        stage.setScene(myScene);
+        stage.setTitle(TITLE);
+        stage.show();
+    }
+
     // Create the game's "scene": what shapes will be in the game and their starting properties
     public Scene setupScene () {
-        startGame();
+        initializeGame();
         myScene = new Scene(root, SIZE, SIZE, WHITE);
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return myScene;
     }
 
-    private void startGame() {
+    private void initializeGame() {
         myScore = new Score(0);
         myLives.setLives(NUMLIVES);
         myLevel.setLevel(0);
         myGameDisplay.createGameStatusText(root, myLives, myLevel, myScore, TEXT_FONT, FONT_SIZE);
         myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
-        addRelevantItemsToScene();
+        addBouncerPaddleBlocks();
     }
 
     // portions of code from bounce lab
@@ -122,22 +119,24 @@ public class Main extends Application {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         myBouncer.move(elapsedTime);
         myBouncer.bounce(SIZE, BOUNCER_SIZE);
-        myGame.ballBouncesOut(myBouncer, myLives, myLevel, myGameDisplay, myScore, SIZE);
+        myGame.handleBallBouncesOut(myBouncer, myLives, myLevel, myGameDisplay, myScore, SIZE);
         myPaddle.keepInBounds(SIZE);
         myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myBouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
         checkForBrickCollision(elapsedTime);
         myGameDisplay.updateGameStatusText(myScore, myLives, myLevel);
-        // check if all blocks have been hit
-        //TODO: wrap in method
         if (myLevel.allBlocksHit()) {
             goToNextLevel();
         }
         if (myLives.outOfLives(myGame, animation)){
-            myLevel.endLevel(root);
-            myGame.loseGame(animation, myLevel, highScore);
-            startGame();
+            endGameAndStartNewOne();
         }
+    }
+
+    private void endGameAndStartNewOne() {
+        myLevel.endLevel(root);
+        myGame.loseGame(animation, myLevel, highScore);
+        initializeGame();
     }
 
     private void goToNextLevel() {
@@ -151,15 +150,25 @@ public class Main extends Application {
         Stage levelStage = new Stage();
         if (myLevel.getLevel() == NUMLEVELS) {
             myGame.winGame(animation, myLives, highScore);
-            startGame();
+            initializeGame();
         }
         else {
             Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "New Level Splash Screen", "Level " + myLevel.getLevel() + " Complete!");
             levelStage.setScene(levelScene);
-            addRelevantItemsToScene();
+            addBouncerPaddleBlocks();
             myGameDisplay.createGameStatusText(root, myLives, myLevel, myScore, TEXT_FONT, FONT_SIZE);
             myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
         }
+    }
+
+    public void addBouncerPaddleBlocks() {
+        myBouncer = new Bouncer(SIZE / 2 - BOUNCER_SIZE / 2, SIZE / 2 + 60, BOUNCER_SIZE, Color.BLACK,
+                BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
+        myPaddle = new Paddle(SIZE / 2 - PADDLE_WIDTH/ 2, SIZE / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
+        myLevel.initBlocks(myLevelFiles, colorMapping, BLOCK_WIDTH, BLOCK_HEIGHT);
+        myLevel.addBlocksToScene(root);
+        root.getChildren().add(myBouncer.getBouncer());
+        root.getChildren().add(myPaddle.getPaddle());
     }
 
     private void handleKeyInput (KeyCode code) {
@@ -187,7 +196,6 @@ public class Main extends Application {
                     handleHitBlock(block, i, elapsedTime);
                 }
             }
-
         }
     }
 
@@ -199,15 +207,10 @@ public class Main extends Application {
 
     private void removeHitBlock(Block block, int i, double elapsedTime) {
         if (block.getType() == 1) {
-            root.getChildren().remove(block.getBlock());
-            myLevel.addHitBlocks(block);
-            myLevel.getBlocksList().set(i, null);
+            removeTheBlock(block, i);
         }
         else if (block.getType() == 3) {
-            System.out.println("exploding block");
-            root.getChildren().remove(block.getBlock());
-            myLevel.addHitBlocks(block);
-            myLevel.getBlocksList().set(i, null);
+            removeTheBlock(block, i);
             explodeBlock(i + 1, block, elapsedTime);
             explodeBlock(i - 1, block, elapsedTime);
         }
@@ -215,6 +218,12 @@ public class Main extends Application {
             block.setType(block.getType() - 1);
             block.setColor(colorMapping[block.getType()]);
         }
+    }
+
+    private void removeTheBlock(Block block, int i) {
+        root.getChildren().remove(block.getBlock());
+        myLevel.addHitBlocks(block);
+        myLevel.getBlocksList().set(i, null);
     }
 
     private void explodeBlock(int i, Block block, double elapsedTime) {
@@ -232,24 +241,7 @@ public class Main extends Application {
         highScore = Math.max(myScore.getScore(), highScore);
     }
 
-    public void addRelevantItemsToScene() {
-        // make some shapes and set their properties
-        myBouncer = new Bouncer(SIZE / 2 - BOUNCER_SIZE / 2, SIZE / 2 + 60, BOUNCER_SIZE, Color.BLACK,
-                BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
-        // x and y represent the top left corner, so center it in window
-        myPaddle = new Paddle(SIZE / 2 - PADDLE_WIDTH/ 2, SIZE / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
-        // create one top level collection to organize the things in the scene
-        // order added to the group is the order in which they are drawn
-        myLevel.initBlocks(myLevelFiles, colorMapping, BLOCK_WIDTH, BLOCK_HEIGHT);
-        myLevel.addBlocksToScene(root);
-        root.getChildren().add(myBouncer.getBouncer());
-        root.getChildren().add(myPaddle.getPaddle());
-        // add Level and Life game display
-    }
-
     public static void main (String[] args) {
         launch(args);
-
     }
-
 }

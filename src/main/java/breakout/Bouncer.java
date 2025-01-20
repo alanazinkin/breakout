@@ -21,9 +21,6 @@ public class Bouncer extends Circle {
     public Bouncer(double centerX, double centerY, int size, Color color, int myXSpeed,
                    int myYSpeed, int myXDirection, int myYDirection) {
         myBouncer = new Circle(centerX, centerY, size, color);
-        myBouncer.setCenterX(centerX);
-        myBouncer.setCenterY(centerY);
-        this.size = size;
         this.myXSpeed = myXSpeed;
         this.myYSpeed = myYSpeed;
         this.myXDirection = myXDirection;

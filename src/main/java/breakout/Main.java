@@ -164,7 +164,7 @@ public class Main extends Application {
         switch (code) {
             case RIGHT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() + PADDLE_SPEED);
             case LEFT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() - PADDLE_SPEED);
-            case R -> myBouncer.getBouncer().setCenterX(0);
+            case R -> myPaddle.resetPaddle();
             case BACK_SPACE -> myLives.incrementLives();
         }
         // TYPICAL way to do it, definitely more readable for longer actions

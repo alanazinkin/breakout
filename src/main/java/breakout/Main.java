@@ -135,7 +135,8 @@ public class Main extends Application {
 
     private void endGameAndStartNewOne() {
         myLevel.endLevel(root);
-        myGame.loseGame(animation, myLevel, highScore);
+        myGame.endGame(animation, "Game Over Splash Screen", "Game Over!\n" + "Final Level: " +
+                myLevel.getLevel() + "\nHigh Score: " + highScore + "\nPress Any Key to Restart!");
         initializeGame();
     }
 
@@ -149,7 +150,9 @@ public class Main extends Application {
         myLevel.endLevel(root);
         Stage levelStage = new Stage();
         if (myLevel.getLevel() == NUMLEVELS) {
-            myGame.winGame(animation, myLives, highScore);
+            myGame.endGame(animation,"Game Won Splash Screen", "You Won!\n" +
+                    "Lives Remaining: " + myLives.getLives() + "\nHigh Score: " + highScore +
+                    "\nPress Any Key to Play Again!");
             initializeGame();
         }
         else {

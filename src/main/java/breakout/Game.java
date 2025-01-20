@@ -15,22 +15,12 @@ public class Game {
         this.numLevels = numLevels;
     }
 
-    public void loseGame(Timeline animation, Level myLevel, int highScore) {
+    public void endGame(Timeline animation, String title, String text) {
         Stage gameOverStage = new Stage();
         SplashScreen gameOverSplashScreen = new SplashScreen();
         animation.pause();
-        Scene levelScene = gameOverSplashScreen.showSplashScreen(gameOverStage, "Game Over Splash Screen", "Game Over!\n" +
-                "Final Level: " + myLevel.getLevel() + "\nHigh Score: " + highScore + "\nPress Any Key to Restart!");
+        Scene levelScene = gameOverSplashScreen.showSplashScreen(gameOverStage, title, text);
         gameOverSplashScreen.handleSplashScreenEvent(levelScene, gameOverStage, animation);
-    }
-
-    public void winGame(Timeline animation, Life myLives, int highScore) {
-        Stage gameWonStage = new Stage();
-        SplashScreen gameWonSplashScreen = new SplashScreen();
-        animation.pause();
-        Scene levelScene = gameWonSplashScreen.showSplashScreen(gameWonStage, "Game Won Splash Screen", "You Won!\n" +
-                "Lives Remaining: " + myLives.getLives() + "\nHigh Score: " + highScore + "\nPress Any Key to Play Again!");
-        gameWonSplashScreen.handleSplashScreenEvent(levelScene, gameWonStage, animation);
     }
 
     public void handleBallBouncesOut(Bouncer myBouncer, Life myLives, Level myLevel, GameDisplay myGameDisplay, Score myScore, int screenSize) {

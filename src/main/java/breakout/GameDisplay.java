@@ -14,15 +14,15 @@ public class GameDisplay {
     private Text scoreText;
     public GameDisplay() {}
 
-    public void createGameStatusText(Group root, Life myLives, Level myLevel, Score myScore,
+    public void createGameStatusText(Group root, String scoreText, String livesText, String levelText,
                                      String font, int fontSize) {
         ScreenText myText = new ScreenText();
-        scoreText = myText.createText("Score: " + myScore.getScore(), SCOREX, SCOREY, font, fontSize);
-        root.getChildren().add(scoreText);
-        livesText = myText.createText("Lives Left: " + myLives.getLives(), LIVESX, LIVESY, font, fontSize);
-        root.getChildren().add(livesText);
-        levelText = myText.createText("Current Level: " + myLevel.getLevel(), LEVELX, LEVELY, font, fontSize);
-        root.getChildren().add(levelText);
+        this.scoreText = myText.createText(scoreText, SCOREX, SCOREY, font, fontSize);
+        root.getChildren().add(this.scoreText);
+        this.livesText = myText.createText(livesText, LIVESX, LIVESY, font, fontSize);
+        root.getChildren().add(this.livesText);
+        this.levelText = myText.createText(levelText, LEVELX, LEVELY, font, fontSize);
+        root.getChildren().add(this.levelText);
     }
 
     public void updateGameStatusText(Score myScore, Life myLives, Level myLevel) {

@@ -108,7 +108,8 @@ public class Main extends Application {
         myScore = new Score(0);
         myLives.setLives(NUMLIVES);
         myLevel.setLevel(0);
-        myGameDisplay.createGameStatusText(root, myLives, myLevel, myScore, TEXT_FONT, FONT_SIZE);
+        myGameDisplay.createGameStatusText(root, "Score: " + myScore.getScore(), "Lives Left: " + myLives.getLives(),
+                "Current Level: " + myLevel.getLevel(), TEXT_FONT, FONT_SIZE);
         myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
         addBouncerPaddleBlocks();
@@ -134,9 +135,11 @@ public class Main extends Application {
     }
 
     private void endGameAndStartNewOne() {
+        int endScore = myScore.getScore();
         myLevel.endLevel(root);
         myGame.endGame(animation, "Game Over Splash Screen", "Game Over!\n" + "Final Level: " +
-                myLevel.getLevel() + "\nHigh Score: " + highScore + "\nPress Any Key to Restart!");
+                myLevel.getLevel() + "\nFinal Score: " + endScore + "\nHigh Score: " + highScore +
+                "\nPress Any Key to Restart!");
         initializeGame();
     }
 
@@ -147,11 +150,12 @@ public class Main extends Application {
     }
 
     private void advanceLevel(Timeline animation) {
+        int finalScore = myScore.getScore();
         myLevel.endLevel(root);
         Stage levelStage = new Stage();
         if (myLevel.getLevel() == NUMLEVELS) {
             myGame.endGame(animation,"Game Won Splash Screen", "You Won!\n" +
-                    "Lives Remaining: " + myLives.getLives() + "\nHigh Score: " + highScore +
+                    "Lives Remaining: " + myLives.getLives() + "\nFinal Score: " + finalScore + "\nHigh Score: " + highScore +
                     "\nPress Any Key to Play Again!");
             initializeGame();
         }
@@ -159,7 +163,8 @@ public class Main extends Application {
             Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "New Level Splash Screen", "Level " + myLevel.getLevel() + " Complete!");
             levelStage.setScene(levelScene);
             addBouncerPaddleBlocks();
-            myGameDisplay.createGameStatusText(root, myLives, myLevel, myScore, TEXT_FONT, FONT_SIZE);
+            myGameDisplay.createGameStatusText(root, "Score: " + myScore.getScore(), "Lives Left: " + myLives.getLives(),
+                    "Current Level: " + myLevel.getLevel(), TEXT_FONT, FONT_SIZE);
             myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
         }
     }

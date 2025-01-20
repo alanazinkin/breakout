@@ -172,6 +172,7 @@ public class Main extends Application {
             case R -> myPaddle.resetPaddle();
             case BACK_SPACE -> myLives.incrementLives();
             case S -> goToNextLevel();
+            case TAB -> myBouncer.setYDirection(myBouncer.getYDirection() * -1);
         }
         // TYPICAL way to do it, definitely more readable for longer actions
 //        if (code == KeyCode.RIGHT) {

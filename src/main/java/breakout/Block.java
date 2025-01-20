@@ -51,6 +51,7 @@ public class Block {
         return row;
     }
 
+    // cooldown idea from: https://plarium.com/en/glossary/cooldown/#:~:text=The%20cooldown%20definition%20in%20gaming,it%20fair%20and%20more%20strategic.
     public boolean isInCooldown() {
         return isInCooldown;
     }

@@ -21,7 +21,7 @@ public class Level {
     }
 
 
-    public void initBlocks(String[] myLevelFiles, Color[] colorMapping, int blockWidth, int blockHeight, Color blockColor) {
+    public void initBlocks(String[] myLevelFiles, Color[] colorMapping, int blockWidth, int blockHeight) {
         String levelFile = myLevelFiles[myLevel];
         File myLayoutFile = new File(levelFile);
         blocks = new ArrayList<Block>();
@@ -42,9 +42,12 @@ public class Level {
                 for (int i = 0; i < split.length; i++) {
                     switch(split[i]) {
                         case "0": continue;
-                        case "1": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[1], 1));
+                        case "1": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[1], 1, j));
                             break;
-                        case "2": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[2], 2));
+                        case "2": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[2], 2, j));
+                            break;
+                        case "3": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[3], 3, j));
+                            break;
                     }
                 }
                 j += 1;

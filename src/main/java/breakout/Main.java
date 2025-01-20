@@ -54,6 +54,7 @@ public class Main extends Application {
     public static final int LEVEL_SCORE = 10;
     public static final int LOSE_LIFE_SCORE = 2;
     public static final int HIT_BRICK_SCORE = 1;
+    public static final double COOLDOWN_TIME = 0.2;
 
 
     // scene contains all the shapes and has several useful methods
@@ -124,7 +125,7 @@ public class Main extends Application {
         myPaddle.keepInBounds(SIZE);
         myBouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
         myBouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
-        checkForBrickCollision();
+        checkForBrickCollision(elapsedTime);
         myGameDisplay.updateGameStatusText(myScore, myLives, myLevel);
         // check if all blocks have been hit
         //TODO: wrap in method
@@ -180,37 +181,54 @@ public class Main extends Application {
 //        }
     }
 
-    public void checkForBrickCollision() {
+    public void checkForBrickCollision(double elapsedTime) {
         for (int i = 0; i < myLevel.getNumBlocks(); i++) {
             Block block = myLevel.getBlocksList().get(i);
             if (block != null){
+                block.updateCooldown(elapsedTime);
                 Shape blockIntersection = Shape.intersect(myBouncer.getBouncer(), block.getBlock());
-                if (blockIntersection.getBoundsInLocal().getWidth() != -1) {
-                    handleHitBlock(block, i);
+                if (blockIntersection.getBoundsInLocal().getWidth() != -1 && !block.isInCooldown()) {
+                    block.startCooldown(COOLDOWN_TIME);
+                    handleHitBlock(block, i, elapsedTime);
                 }
             }
 
         }
     }
 
-    private void handleHitBlock(Block block, int i) {
+    private void handleHitBlock(Block block, int i, double elapsedTime) {
         updateHighScore(block.getType());
         myBouncer.setYDirection(myBouncer.getYDirection() * -1);
-        removeHitBlock(block, i);
+        removeHitBlock(block, i, elapsedTime);
     }
 
-    private void removeHitBlock(Block block, int i) {
+    private void removeHitBlock(Block block, int i, double elapsedTime) {
         if (block.getType() == 1) {
             root.getChildren().remove(block.getBlock());
             myLevel.addHitBlocks(block);
             myLevel.getBlocksList().set(i, null);
         }
-        else if (block.getType() == 10) {
-            System.out.println("power up block");
+        else if (block.getType() == 3) {
+            System.out.println("exploding block");
+            root.getChildren().remove(block.getBlock());
+            myLevel.addHitBlocks(block);
+            myLevel.getBlocksList().set(i, null);
+            explodeBlock(i + 1, block, elapsedTime);
+            explodeBlock(i - 1, block, elapsedTime);
         }
         else {
             block.setType(block.getType() - 1);
             block.setColor(colorMapping[block.getType()]);
+        }
+    }
+
+    private void explodeBlock(int i, Block block, double elapsedTime) {
+        if (0 <= i && i < myLevel.getNumBlocks()) {
+            Block adjacent = myLevel.getBlocksList().get(i);
+            if (adjacent != null && adjacent.getRow() ==  block.getRow()) {
+                //recursive
+                removeHitBlock(adjacent, i, elapsedTime);
+            }
         }
     }
 
@@ -227,7 +245,7 @@ public class Main extends Application {
         myPaddle = new Paddle(SIZE / 2 - PADDLE_WIDTH/ 2, SIZE / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
         // create one top level collection to organize the things in the scene
         // order added to the group is the order in which they are drawn
-        myLevel.initBlocks(myLevelFiles, colorMapping, BLOCK_WIDTH, BLOCK_HEIGHT, Color.BLUE);
+        myLevel.initBlocks(myLevelFiles, colorMapping, BLOCK_WIDTH, BLOCK_HEIGHT);
         myLevel.addBlocksToScene(root);
         root.getChildren().add(myBouncer.getBouncer());
         root.getChildren().add(myPaddle.getPaddle());

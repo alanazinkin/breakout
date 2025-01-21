@@ -1,13 +1,9 @@
 package breakout;
 
-import javafx.animation.Timeline;
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-
-import static breakout.Main.*;
 
 // bouncer class inspired from bounce lab
 public class Bouncer extends Circle {
@@ -25,6 +21,7 @@ public class Bouncer extends Circle {
     public Bouncer(double centerX, double centerY, int size, Color color, double myXSpeed,
                    double myYSpeed, int myXDirection, int myYDirection) {
         myBouncer = new Circle(centerX, centerY, size, color);
+        this.size = size;
         this.myXSpeed = myXSpeed;
         this.myYSpeed = myYSpeed;
         this.myXDirection = myXDirection;
@@ -37,10 +34,10 @@ public class Bouncer extends Circle {
     }
 
     public void bounce(int screenSize, int bouncerSize) {
-        if (myBouncer.getCenterX() >= screenSize - bouncerSize || myBouncer.getCenterX() <= 0 + bouncerSize) {
+        if (myBouncer.getCenterX() >= screenSize - bouncerSize || myBouncer.getCenterX() <= bouncerSize) {
             myXDirection *= -1;
         }
-        if (myBouncer.getCenterY() >= screenSize - bouncerSize || myBouncer.getCenterY() <= 0 + bouncerSize) {
+        if (myBouncer.getCenterY() >= screenSize - bouncerSize || myBouncer.getCenterY() <= bouncerSize) {
             myYDirection *= -1;
         }
     }
@@ -49,8 +46,8 @@ public class Bouncer extends Circle {
         Shape paddleIntersection = Shape.intersect(myBouncer, paddle);
         if (paddleIntersection.getBoundsInLocal().getWidth() != -1) {
             myYDirection *= -1;
-            // specific paddle for level 3
-            if (myLevel.getLevel() == 3) {
+            // specific paddle for above level 3
+            if (myLevel.getLevel() >= 3) {
                 setBouncerXDirectionPaddle(paddle);
             }
         }
@@ -77,14 +74,6 @@ public class Bouncer extends Circle {
         myYDirection = -1;
     }
 
-    public void jumpAround(Group root, int bouncerSize, double elapsedTime) {
-        bounce(SIZE, bouncerSize);
-        move(elapsedTime);
-        if (outTheBounds(SIZE, getMySize())) {
-            root.getChildren().remove(getBouncer());
-        }
-    }
-
 
     public boolean outTheBounds(int screenSize, int bouncerSize) {
         return (myBouncer.getCenterY() >= screenSize - bouncerSize - SPACE);
@@ -106,16 +95,8 @@ public class Bouncer extends Circle {
         return this.myYDirection;
     }
 
-    public void setXSpeed(double speed) {
-        myXSpeed = speed;
-    }
-
     public void setYSpeed(double speed) {
         myYSpeed = speed;
-    }
-
-    public double getXSpeed() {
-        return this.myXSpeed;
     }
 
     public double getYSpeed() {
@@ -124,10 +105,6 @@ public class Bouncer extends Circle {
 
     public Circle getBouncer() {
         return this.myBouncer;
-    }
-
-    public int getMySize() {
-        return size;
     }
 
 }

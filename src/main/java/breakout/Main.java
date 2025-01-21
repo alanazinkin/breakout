@@ -272,7 +272,8 @@ public class Main extends Application {
         }
         else if (block.getType() == 6) {
             Powerup myPowerup = new Powerup(5);
-            myPowerup.releaseBouncerPowerup(activeBouncers, initialBouncerYSpeed);
+            double newSpeed = 1.5;
+            myPowerup.releaseBouncerPowerup(activeBouncers, initialBouncerYSpeed, newSpeed);
             removeTheBlock(block, i);
         }
         else {

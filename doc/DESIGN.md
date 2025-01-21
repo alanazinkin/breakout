@@ -58,3 +58,7 @@ would have been significantly easier to make had I used inheritance with an abst
 3. Update NUMLEVELS public static constant in the Main class at the top of the class. It should be a number that
 is 1 higher than the highest level since levels begin at 0 (this is intentional to prevent index out of bounds errors).
 
+## How to Implement Unimplemented Features
+1. Slow Down Ball Power-up: input newSpeed parameter as a fractional value rather than a number greater than 1 and create new "slow down power-up" block variant
+2. Catch and Release Paddle: Create a new key in the HandleKeyInput method. When bouncer intersects with paddle, freeze the bouncer's movement and call setCenterX() and
+set it equal to the paddle.getX() value upon the intersection. 

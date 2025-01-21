@@ -27,8 +27,8 @@ public class Powerup {
         endPowerup.play();
     }
 
-    public void releaseBouncerPowerup(HashSet<Bouncer> myActiveBouncers, double initialYspeed) {
-        speedUpBouncers(myActiveBouncers);
+    public void releaseBouncerPowerup(HashSet<Bouncer> myActiveBouncers, double initialYspeed, double newSpeed) {
+        speedUpBouncers(myActiveBouncers, newSpeed);
         Timeline endPowerup = new Timeline(
                 new KeyFrame(Duration.seconds(time), event -> slowDownBouncers(myActiveBouncers, initialYspeed))
         );
@@ -36,9 +36,9 @@ public class Powerup {
         endPowerup.play();
     }
 
-    public void speedUpBouncers(HashSet<Bouncer> myActiveBouncers) {
+    public void speedUpBouncers(HashSet<Bouncer> myActiveBouncers, double speed) {
         for (Bouncer bouncer : myActiveBouncers) {
-            bouncer.setYSpeed((bouncer.getYSpeed() * 1.5));
+            bouncer.setYSpeed((bouncer.getYSpeed() * speed));
         }
     }
 

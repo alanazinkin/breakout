@@ -71,7 +71,6 @@ public class Level {
         clearBlocksList();
         clearHitBlocksList();
         myLevel++;
-        System.out.println("Level " + myLevel);
     }
 
     public void clearBlocksList() {

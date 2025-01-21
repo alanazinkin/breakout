@@ -1,9 +1,13 @@
 package breakout;
 
+import javafx.animation.Timeline;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+
+import static breakout.Main.*;
 
 // bouncer class inspired from bounce lab
 public class Bouncer extends Circle {
@@ -50,10 +54,7 @@ public class Bouncer extends Circle {
 
     public void keepWithinFrame(int screenSize, int bouncerSize) {
         if (myBouncer.getCenterY() >= screenSize - bouncerSize - EXTRA_SPACE) {
-            myBouncer.setCenterX(screenSize / 2 - bouncerSize / 2);
-            myBouncer.setCenterY(screenSize / 2 - bouncerSize / 2 + 60);
-            myXDirection = 1;
-            myYDirection = -1;
+            resetBouncer(screenSize, bouncerSize);
         }
     }
 
@@ -62,6 +63,14 @@ public class Bouncer extends Circle {
         myBouncer.setCenterY(screenSize / 2 - bouncerSize / 2 + 60);
         myXDirection = 1;
         myYDirection = -1;
+    }
+
+    public void jumpAround(Group root, int bouncerSize, double elapsedTime) {
+        bounce(SIZE, bouncerSize);
+        move(elapsedTime);
+        if (outTheBounds(SIZE, getMySize())) {
+            root.getChildren().remove(getBouncer());
+        }
     }
 
 

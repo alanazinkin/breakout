@@ -48,15 +48,17 @@ This project implements the game of Breakout with multiple levels.
  * Known Bugs: 
    * When the bouncer hits the paddle on its side, it will vibrate through the paddle.
    * When the bouncer hits a block very quickly, it may appear to break through the block instead
-   of bouncing off it.
+   of bouncing off it. This bug can be reduced by reducing the cooldown time of a block.
    
  * Features implemented:
    * BREAK-01 through BREAK-15
+   * BREAK-16A
    * BREAK-17A, BREAK-17B, BREAK-17C
    * BREAK-18A, BREAK-18B, BREAK-18D
    * BREAK19B, BREAK19D, BREAK19E, BREAK19F, BREAK19G
 
  * Features unimplemented:
+   * BREAK-16B
 
  * Noteworthy Features:
 

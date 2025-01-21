@@ -46,12 +46,15 @@ This project implements the game of Breakout with multiple levels.
 
  * Assumptions or Simplifications:
 
- * Known Bugs: When the bouncer hits the paddle on its side, it will vibrate through the paddle.
-
+ * Known Bugs: 
+   * When the bouncer hits the paddle on its side, it will vibrate through the paddle.
+   * When the bouncer hits a block very quickly, it may appear to break through the block instead
+   of bouncing off it.
+   
  * Features implemented:
    * BREAK-01 through BREAK-15
    * BREAK-17A, BREAK-17B, BREAK-17C
-   * BREAK-18A, BREAK-18B
+   * BREAK-18A, BREAK-18B, BREAK-18D
    * BREAK19B, BREAK19D, BREAK19E, BREAK19F, BREAK19G
 
  * Features unimplemented:
@@ -61,5 +64,11 @@ This project implements the game of Breakout with multiple levels.
 
 
 ### Assignment Impressions
-
+This assignment was a perfect introduction to this class. It taught me various 
+essential skills for this course, and made me excited to learn new strategies for
+designing and debugging code. However, it was also very challenging given the limited
+office hours held during the first two weeks. A bit of extra support may have been helpful
+as students get adjusted to this course. Overall, I enjoyed this project and am extremely proud of 
+the progress I made in such a short period of time. I would certainly retain this project in future
+semesters.
 

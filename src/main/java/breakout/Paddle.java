@@ -1,8 +1,6 @@
 package breakout;
 
-import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 import static breakout.Main.PADDLE_WIDTH;
 import static breakout.Main.SIZE;
@@ -23,7 +21,7 @@ public class Paddle {
         }
     }
 
-    public void expandPaddleLength(int width) {
+    public void changePaddleWidth(int width) {
         Paddle.setWidth(width);
     }
 

@@ -65,7 +65,7 @@ public class Main extends Application {
     private SplashScreen myLevelSplashScreen = new SplashScreen();
     private SplashScreen myGameRulesSplashScreen = new SplashScreen();
     private Stage stage;
-    private Color[] colorMapping = new Color[]{WHITE, BLUE, PINK, PURPLE};
+    private Color[] colorMapping = new Color[]{WHITE, BLUE, PINK, PURPLE, GREENYELLOW};
 
 
 
@@ -221,6 +221,11 @@ public class Main extends Application {
             removeTheBlock(block, i);
             explodeBlock(i + 1, block, elapsedTime);
             explodeBlock(i - 1, block, elapsedTime);
+        }
+        else if (block.getType() == 4) {
+            Powerup myPowerup = new Powerup(5);
+            myPowerup.releasePowerup(myPaddle);
+            removeTheBlock(block, i);
         }
         else {
             block.setType(block.getType() - 1);

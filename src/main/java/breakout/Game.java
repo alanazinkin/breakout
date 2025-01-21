@@ -29,17 +29,13 @@ public class Game {
 
     public void handleBallBouncesOut(Group root, HashSet<Bouncer> activeBouncers, HashSet<Bouncer> toRemove, Bouncer myBouncer, Life myLives, Level myLevel, GameDisplay myGameDisplay, Score myScore, int screenSize) {
         if (myBouncer.outTheBounds(screenSize, BOUNCER_SIZE)){
-            System.out.println(activeBouncers);
-            System.out.println(activeBouncers.size());
             if (activeBouncers.size() <= 1) {
-                System.out.println("bye bye bouncer");
                 myBouncer.resetBouncer(screenSize, myBouncer.getMySize());
                 myLives.decrementLives();
                 myScore.decreaseScore(LOSE_LIFE_SCORE);
                 myGameDisplay.updateGameStatusText(myScore, myLives, myLevel);
             }
             else {
-                System.out.println("there are active bouncers");
                 root.getChildren().remove(myBouncer.getBouncer());
                 toRemove.add(myBouncer);
             }

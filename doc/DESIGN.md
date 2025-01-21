@@ -38,6 +38,7 @@ array. This also means the user should update these mapping in the initBlocks me
 
 
 ## Changes from the Plan
+* Did not include different shaped blocks as a block variant.
 
 
 ## How to Add New Levels

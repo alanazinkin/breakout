@@ -1,6 +1,5 @@
 package breakout;
 
-import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 
 import static breakout.Main.*;
@@ -28,12 +27,6 @@ public class Paddle {
     public void resetPaddle() {
         Paddle.setX(SIZE / 2 - PADDLE_WIDTH/ 2);
         Paddle.setY(SIZE / 2 + 100);
-    }
-
-    public Paddle addPaddle(Group root) {
-        Paddle myPaddle = new Paddle(SIZE / 2 - PADDLE_WIDTH/ 2, SIZE / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
-        root.getChildren().add(myPaddle.getPaddle());
-        return myPaddle;
     }
 
     public Rectangle getPaddle() {

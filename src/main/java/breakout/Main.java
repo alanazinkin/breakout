@@ -44,7 +44,6 @@ public class Main extends Application {
     public static final int FONT_SIZE = 20;
     public static final String TEXT_FONT = "Lucida Bright";
     public static final int LEVEL_SCORE = 10;
-    public static final int LOSE_LIFE_SCORE = 2;
     public static final double COOLDOWN_TIME = 0.01;
 
     // scene contains all the shapes and has several useful methods
@@ -57,7 +56,6 @@ public class Main extends Application {
     private double initialBouncerYSpeed = 220;
     private Level myLevel = new Level(0);
     private Game myGame;
-    private Score myScore;
     private int highScore;
     private GameDisplay myGameDisplay = new GameDisplay();
     private Bouncer myBouncer;
@@ -122,12 +120,11 @@ public class Main extends Application {
     private void initializeGame() {
         activeBouncers = new HashSet<>();
         toRemoveBouncers = new HashSet<>();
-        myScore = new Score(0);
         myLives.setLives(NUMLIVES);
         myLevel.setLevel(0);
-        myGameDisplay.createGameStatusText(root, "Score: " + myScore.getScore(), "Lives Left: " + myLives.getLives(),
+        myGame = new Game(NUMLEVELS, 0);
+        myGameDisplay.createGameStatusText(root, "Score: " + myGame.getScore(), "Lives Left: " + myLives.getLives(),
                 "Current Level: " + myLevel.getLevel(), TEXT_FONT, FONT_SIZE);
-        myGame = new Game(NUMLEVELS);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
         addBouncerPaddleBlocks();
     }
@@ -138,7 +135,7 @@ public class Main extends Application {
         for (Bouncer bouncer : activeBouncers) {
             bouncer.move(elapsedTime);
             bouncer.bounce(SIZE, BOUNCER_SIZE);
-            myGame.handleBallBouncesOut(root, activeBouncers, toRemoveBouncers, bouncer, myLives, myLevel, myGameDisplay, myScore, SIZE);
+            myGame.handleBallBouncesOut(root, activeBouncers, toRemoveBouncers, bouncer, myLives, myLevel, myGameDisplay, myGame, SIZE);
             bouncer.paddleIntersect(myPaddle.getPaddle(), myLevel);
             bouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
             checkForBlockCollision(elapsedTime, bouncer);
@@ -146,11 +143,11 @@ public class Main extends Application {
         removeStaleBouncers();
 
         myPaddle.keepInBounds(SIZE);
-        myGameDisplay.updateGameStatusText(myScore, myLives, myLevel);
+        myGameDisplay.updateGameStatusText(myGame, myLives, myLevel);
         if (myLevel.allBlocksHit()) {
             goToNextLevel();
         }
-        if (myLives.outOfLives(myGame, animation)){
+        if (myLives.outOfLives()){
             endGameAndStartNewOne();
         }
     }
@@ -164,7 +161,7 @@ public class Main extends Application {
     }
 
     private void endGameAndStartNewOne() {
-        int endScore = myScore.getScore();
+        int endScore = myGame.getScore();
         myLevel.endLevel(root);
         myGame.endGame(animation, "Game Over Splash Screen", "Game Over!\n" + "Final Level: " +
                 myLevel.getLevel() + "\nFinal Score: " + endScore + "\nHigh Score: " + highScore +
@@ -179,10 +176,11 @@ public class Main extends Application {
     }
 
     private void advanceLevel(Timeline animation) {
-        int finalScore = myScore.getScore();
         myLevel.endLevel(root);
         Stage levelStage = new Stage();
         if (myLevel.getLevel() == NUMLEVELS) {
+            updateHighScore(myLives.getLives() * 2);
+            int finalScore = myGame.getScore();
             myGame.endGame(animation,"Game Won Splash Screen", "You Won!\n" +
                     "Lives Remaining: " + myLives.getLives() + "\nFinal Score: " + finalScore + "\nHigh Score: " + highScore +
                     "\nPress Any Key to Play Again!");
@@ -192,7 +190,7 @@ public class Main extends Application {
             Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "New Level Splash Screen", "Level " + myLevel.getLevel() + " Complete!");
             levelStage.setScene(levelScene);
             addBouncerPaddleBlocks();
-            myGameDisplay.createGameStatusText(root, "Score: " + myScore.getScore(), "Lives Left: " + myLives.getLives(),
+            myGameDisplay.createGameStatusText(root, "Score: " + myGame.getScore(), "Lives Left: " + myLives.getLives(),
                     "Current Level: " + myLevel.getLevel(), TEXT_FONT, FONT_SIZE);
             myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
         }
@@ -299,8 +297,8 @@ public class Main extends Application {
     }
 
     private void updateHighScore(int hitBrickScore) {
-        myScore.increaseScore(hitBrickScore);
-        highScore = Math.max(myScore.getScore(), highScore);
+        myGame.increaseScore(hitBrickScore);
+        highScore = Math.max(myGame.getScore(), highScore);
     }
 
     public static void main (String[] args) {

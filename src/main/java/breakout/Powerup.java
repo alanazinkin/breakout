@@ -2,8 +2,6 @@ package breakout;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.Group;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.HashSet;
@@ -47,11 +45,5 @@ public class Powerup {
             bouncer.setYSpeed(initialYSpeed);
         }
     }
-
-    /*public void addBouncer() {
-        return new Bouncer();
-    }
-
-     */
 
 }

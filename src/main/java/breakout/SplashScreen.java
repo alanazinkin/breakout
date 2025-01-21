@@ -48,22 +48,6 @@ public class SplashScreen {
         stage.close();
         timeline.play();
     }
-
-    public void handleGameOverEvent(Scene myStage, Stage newStage, Timeline animation) {
-        myStage.setOnKeyPressed(event -> {
-            closeSplashScreen(newStage);
-        });
-        myStage.setOnMouseClicked(event -> {
-            closeSplashScreen(newStage);
-        });
-        newStage.setOnCloseRequest((WindowEvent event) -> {
-            closeSplashScreen(newStage);
-        });
-    }
-
-    public void closeSplashScreen(Stage stage) {
-        stage.close();
-    }
 }
 
 

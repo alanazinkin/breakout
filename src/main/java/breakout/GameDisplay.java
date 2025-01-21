@@ -22,8 +22,8 @@ public class GameDisplay {
         root.getChildren().add(myLevelText);
     }
 
-    public void updateGameStatusText(Score myScore, Life myLives, Level myLevel) {
-        myScoreText.setText("Score: " + myScore.getScore());
+    public void updateGameStatusText(Game myGame, Life myLives, Level myLevel) {
+        myScoreText.setText("Score: " + myGame.getScore());
         myLivesText.setText("Lives Left: " + myLives.getLives());
         myLevelText.setText("Current Level: " + myLevel.getLevel());
     }

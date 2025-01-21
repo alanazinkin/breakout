@@ -7,9 +7,6 @@ import java.util.Scanner;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 public class Level {
     ArrayList<Block> myBlocks;
@@ -24,7 +21,7 @@ public class Level {
     public void initBlocks(String[] myLevelFiles, Color[] colorMapping, int blockWidth, int blockHeight) {
         String levelFile = myLevelFiles[myLevel];
         File myLayoutFile = new File(levelFile);
-        myBlocks = new ArrayList<Block>();
+        myBlocks = new ArrayList<>();
         readLevelFile(myLayoutFile, colorMapping, blockWidth, blockHeight);
     }
 
@@ -86,14 +83,6 @@ public class Level {
         return (myHitBlocks.size() == myBlocks.size());
     }
 
-    public Text createLevelText(double xPosition, double yPosition, String font, int fontSize) {
-        Text levelText = new Text(xPosition, yPosition, "Current Level: " + myLevel);
-        levelText.setFill(Color.HOTPINK);
-        Font f = Font.font(font, FontWeight.BOLD, fontSize);
-        levelText.setFont(f);
-        return levelText;
-    }
-
     public void setLevel(int myLevel) {
         this.myLevel = myLevel;
     }
@@ -114,8 +103,5 @@ public class Level {
         return this.myLevel;
     }
 
-    public int getNumHitBlocks() {
-        return myHitBlocks.size();
-    }
 
 }

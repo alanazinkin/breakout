@@ -50,6 +50,8 @@ public class Level {
                             break;
                         case "4": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[4], 4, j));
                             break;
+                        case "5": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[5], 5, j));
+                            break;
                     }
                 }
                 j += 1;

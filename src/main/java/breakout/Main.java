@@ -68,7 +68,7 @@ public class Main extends Application {
     private SplashScreen myLevelSplashScreen = new SplashScreen();
     private SplashScreen myGameRulesSplashScreen = new SplashScreen();
     private Stage stage;
-    private Color[] colorMapping = new Color[]{WHITE, BLUE, PINK, PURPLE, GREENYELLOW};
+    private Color[] colorMapping = new Color[]{WHITE, BLUE, PINK, PURPLE, GREENYELLOW, LIGHTCORAL};
     private HashSet<Bouncer> activeBouncers;
     private HashSet<Bouncer> toRemoveBouncers;
 
@@ -131,7 +131,7 @@ public class Main extends Application {
             myGame.handleBallBouncesOut(root, activeBouncers, toRemoveBouncers, bouncer, myLives, myLevel, myGameDisplay, myScore, SIZE);
             bouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
             bouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
-            checkForBrickCollision(elapsedTime, bouncer);
+            checkForBlockCollision(elapsedTime, bouncer);
         }
         removeStaleBouncers();
 
@@ -219,7 +219,7 @@ public class Main extends Application {
         }
     }
 
-    public void checkForBrickCollision(double elapsedTime, Bouncer bouncer) {
+    public void checkForBlockCollision(double elapsedTime, Bouncer bouncer) {
         for (int i = 0; i < myLevel.getNumBlocks(); i++) {
             Block block = myLevel.getBlocksList().get(i);
             if (block != null){
@@ -249,12 +249,15 @@ public class Main extends Application {
             explodeBlock(i - 1, block, elapsedTime);
         }
         else if (block.getType() == 4) {
+            Powerup myPowerup = new Powerup(5);
+            myPowerup.releasePaddlePowerup(myPaddle);
+            removeTheBlock(block, i);
+        }
+        else if (block.getType() == 5) {
             Bouncer myNewBouncer = new Bouncer(SIZE / 2 - BOUNCER_SIZE / 2, SIZE / 2 + 60, BOUNCER_SIZE, HOTPINK,
                     BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
             activeBouncers.add(myNewBouncer);
             root.getChildren().add(myNewBouncer.getBouncer());
-            Powerup myPowerup = new Powerup(5);
-            myPowerup.releasePaddlePowerup(myPaddle);
             removeTheBlock(block, i);
         }
         else {

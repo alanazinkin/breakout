@@ -107,4 +107,8 @@ public class Bouncer extends Circle {
         return this.myBouncer;
     }
 
+    public int getMySize() {
+        return this.size;
+    }
+
 }

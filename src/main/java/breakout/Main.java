@@ -74,6 +74,9 @@ public class Main extends Application {
 
 
     @Override
+    /**
+     * Entry point of Breakout Game
+     */
     public void start (Stage stage) {
         makeStage(stage);
         makeGameLoop();
@@ -85,6 +88,9 @@ public class Main extends Application {
         highScore = 0;
     }
 
+    /**
+     * Creates Game loop timeline which goes on indefinitely
+     */
     private void makeGameLoop() {
         animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -100,7 +106,9 @@ public class Main extends Application {
         stage.show();
     }
 
-    // Create the game's "scene": what shapes will be in the game and their starting properties
+    /**
+     * Create the game's "scene": what shapes will be in the game and their starting properties
+      */
     public Scene setupScene () {
         initializeGame();
         myScene = new Scene(root, SIZE, SIZE, WHITE);
@@ -108,6 +116,9 @@ public class Main extends Application {
         return myScene;
     }
 
+    /**
+     * Resets score, lives, level, game display, and adds relevant items to the scene when the game starts
+     */
     private void initializeGame() {
         activeBouncers = new HashSet<>();
         toRemoveBouncers = new HashSet<>();

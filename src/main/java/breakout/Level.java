@@ -12,8 +12,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class Level {
-    ArrayList<Block> blocks;
-    ArrayList<Block> hitBlocks = new ArrayList<>();
+    ArrayList<Block> myBlocks;
+    ArrayList<Block> myHitBlocks = new ArrayList<>();
     int myLevel;
 
     Level(int myLevel) {
@@ -24,7 +24,7 @@ public class Level {
     public void initBlocks(String[] myLevelFiles, Color[] colorMapping, int blockWidth, int blockHeight) {
         String levelFile = myLevelFiles[myLevel];
         File myLayoutFile = new File(levelFile);
-        blocks = new ArrayList<Block>();
+        myBlocks = new ArrayList<Block>();
         readLevelFile(myLayoutFile, colorMapping, blockWidth, blockHeight);
     }
 
@@ -42,17 +42,17 @@ public class Level {
                 for (int i = 0; i < split.length; i++) {
                     switch(split[i]) {
                         case "0": continue;
-                        case "1": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[1], 1, j));
+                        case "1": myBlocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[1], 1, j));
                             break;
-                        case "2": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[2], 2, j));
+                        case "2": myBlocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[2], 2, j));
                             break;
-                        case "3": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[3], 3, j));
+                        case "3": myBlocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[3], 3, j));
                             break;
-                        case "4": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[4], 4, j));
+                        case "4": myBlocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[4], 4, j));
                             break;
-                        case "5": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[5], 5, j));
+                        case "5": myBlocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[5], 5, j));
                             break;
-                        case "6": blocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[6], 6, j));
+                        case "6": myBlocks.add(new Block(i * blockWidth, j * blockHeight, blockWidth, blockHeight, colorMapping[6], 6, j));
                             break;
                     }
                 }
@@ -65,7 +65,7 @@ public class Level {
         }
     }
     public void addBlocksToScene(Group root) {
-        for (Block myBlock : blocks) {
+        for (Block myBlock : myBlocks) {
             root.getChildren().add(myBlock.getBlock());
         }
     }
@@ -78,15 +78,15 @@ public class Level {
     }
 
     public void clearBlocksList() {
-        this.blocks.clear();
+        this.myBlocks.clear();
     }
 
     public void clearHitBlocksList() {
-        this.hitBlocks.clear();
+        myHitBlocks.clear();
     }
 
     public boolean allBlocksHit() {
-        return (hitBlocks.size() == blocks.size());
+        return (myHitBlocks.size() == myBlocks.size());
     }
 
     public Text createLevelText(double xPosition, double yPosition, String font, int fontSize) {
@@ -102,15 +102,15 @@ public class Level {
     }
 
     public int getNumBlocks() {
-        return this.blocks.size();
+        return this.myBlocks.size();
     }
 
     public List<Block> getBlocksList() {
-        return this.blocks;
+        return this.myBlocks;
     }
 
     public void addHitBlocks(Block hitBlock) {
-        this.hitBlocks.add(hitBlock);
+        myHitBlocks.add(hitBlock);
     }
 
     public int getLevel() {
@@ -118,7 +118,7 @@ public class Level {
     }
 
     public int getNumHitBlocks() {
-        return this.hitBlocks.size();
+        return myHitBlocks.size();
     }
 
 }

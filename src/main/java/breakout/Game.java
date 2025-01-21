@@ -11,12 +11,12 @@ import static breakout.Main.BOUNCER_SIZE;
 import static breakout.Main.LOSE_LIFE_SCORE;
 
 public class Game {
-    int numLevels;
+    int myNumLevels;
 
     public static final String LEVELFILE_PATH = "src/main/resources/";
 
     public Game(int numLevels) {
-        this.numLevels = numLevels;
+        myNumLevels = numLevels;
     }
 
     public void endGame(Timeline animation, String title, String text) {

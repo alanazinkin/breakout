@@ -54,7 +54,6 @@ This project implements the game of Breakout with multiple levels.
    * Assume that power-ups are based on the specific block hit and are applied automatically. Some may last
 for a specific amount of time, and others occur until the level ends
    * Assume that blocks are rectangles, bouncers are the same size, and paddle are also rectangles.
-   * 
 
  * Known Bugs: 
    * When the bouncer hits the paddle on its side, it will vibrate through the paddle.

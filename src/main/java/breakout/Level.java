@@ -28,10 +28,7 @@ public class Level {
         readLevelFile(myLayoutFile, colorMapping, blockWidth, blockHeight);
     }
 
-    public String getLevelFile(String[] myLevelFiles, int level, String levelFile) {
-        return (myLevelFiles[level]);
-    }
-
+    // for future projects, this method should be broken down and should leverage inheritance
     public void readLevelFile(File myLayoutFile, Color[] colorMapping, int blockWidth, int blockHeight) {
         try {
             Scanner s = new Scanner(myLayoutFile);

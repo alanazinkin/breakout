@@ -39,6 +39,16 @@ array. This also means the user should update these mapping in the initBlocks me
 
 ## Changes from the Plan
 * Did not include different shaped blocks as a block variant.
+* Did not create new variants of the Breakout Game
+* Did not create catch and release paddle or the V shaped paddle with two sides.
+* "Tough blocks" take 2 hits to break rather than 5. This functionality could be easily changed to include 5 hits, but
+makes the game much longer.
+* Did not make different shaped blocks because I chose to make the Blocks all rectangles rather than extend the 
+shape class. It makes the game display more aesthetic.
+* Instead of slowing down the ball, I chose to speed up the ball, but this feature could easily be implemented given the current methods.
+* I did not include the "?" key idea simply because I never had the chance to implement a random powerup generator. This feature
+would have been significantly easier to make had I used inheritance with an abstract Powerup class and specific powerup subclasses.
+* The levels do not become increasingly challenging because the paddle gets smaller, but rather because the paddle has more targeted bouncing functionality.
 
 
 ## How to Add New Levels

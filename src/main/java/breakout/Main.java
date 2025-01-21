@@ -45,7 +45,7 @@ public class Main extends Application {
     public static final String TEXT_FONT = "Lucida Bright";
     public static final int LEVEL_SCORE = 10;
     public static final int LOSE_LIFE_SCORE = 2;
-    public static final double COOLDOWN_TIME = 0.1;
+    public static final double COOLDOWN_TIME = 0.01;
 
     // scene contains all the shapes and has several useful methods
     private Scene myScene;

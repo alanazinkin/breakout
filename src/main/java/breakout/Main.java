@@ -27,9 +27,9 @@ public class Main extends Application {
     public static final int SIZE = 600;
     public static final int FRAMES_PER_SECOND = 60;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    private static final int NUMLEVELS = 3;
+    private static final int NUMLEVELS = 4;
     public static final int BOUNCER_SIZE = 20;
-    public static final int PADDLE_HEIGHT = 20;
+    public static final int PADDLE_HEIGHT = 5;
     public static final int PADDLE_WIDTH = 80;
     public static final int BLOCK_WIDTH = 120;
     public static final int BLOCK_HEIGHT = 40;
@@ -45,7 +45,7 @@ public class Main extends Application {
     public static final String TEXT_FONT = "Lucida Bright";
     public static final int LEVEL_SCORE = 10;
     public static final int LOSE_LIFE_SCORE = 2;
-    public static final double COOLDOWN_TIME = 0.2;
+    public static final double COOLDOWN_TIME = 0.1;
 
     // scene contains all the shapes and has several useful methods
     private Scene myScene;
@@ -128,7 +128,7 @@ public class Main extends Application {
             bouncer.move(elapsedTime);
             bouncer.bounce(SIZE, BOUNCER_SIZE);
             myGame.handleBallBouncesOut(root, activeBouncers, toRemoveBouncers, bouncer, myLives, myLevel, myGameDisplay, myScore, SIZE);
-            bouncer.paddleIntersect(myPaddle.getPaddle(), BOUNCER_SIZE);
+            bouncer.paddleIntersect(myPaddle.getPaddle(), myLevel);
             bouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
             checkForBlockCollision(elapsedTime, bouncer);
         }

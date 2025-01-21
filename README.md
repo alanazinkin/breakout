@@ -13,8 +13,7 @@ This project implements the game of Breakout with multiple levels.
 
  * Finish Date: Tuesday January 21st, 2025
 
- * Hours Spent: 
-
+ * Hours Spent: 35
 
 
 ### Attributions

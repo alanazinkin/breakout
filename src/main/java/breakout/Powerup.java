@@ -6,6 +6,8 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+import java.util.HashSet;
+
 import static breakout.Main.*;
 
 public class Powerup {
@@ -25,8 +27,25 @@ public class Powerup {
         endPowerup.play();
     }
 
-    public void handleNewBouncerOutOfBounds(Group root, Bouncer myNewBouncer) {
+    public void releaseBouncerPowerup(HashSet<Bouncer> myActiveBouncers, double initialYspeed) {
+        speedUpBouncers(myActiveBouncers);
+        Timeline endPowerup = new Timeline(
+                new KeyFrame(Duration.seconds(time), event -> slowDownBouncers(myActiveBouncers, initialYspeed))
+        );
+        endPowerup.setCycleCount(1);
+        endPowerup.play();
+    }
 
+    public void speedUpBouncers(HashSet<Bouncer> myActiveBouncers) {
+        for (Bouncer bouncer : myActiveBouncers) {
+            bouncer.setYSpeed((bouncer.getYSpeed() * 1.5));
+        }
+    }
+
+    public void slowDownBouncers(HashSet<Bouncer> myActiveBouncers, double initialYSpeed) {
+        for (Bouncer bouncer : myActiveBouncers) {
+            bouncer.setYSpeed(initialYSpeed);
+        }
     }
 
     /*public void addBouncer() {

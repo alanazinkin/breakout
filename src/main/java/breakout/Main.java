@@ -11,7 +11,6 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import static javafx.scene.paint.Color.*;
@@ -34,8 +33,6 @@ public class Main extends Application {
     public static final int PADDLE_WIDTH = 80;
     public static final int BLOCK_WIDTH = 120;
     public static final int BLOCK_HEIGHT = 40;
-    public static final int BALL_XSPEED = 150;
-    public static final int BALL_YSPEED = 220;
     public static final int PADDLE_SPEED = 60;
     public static final double LIVESX = (double) SIZE / 20;
     public static final double LIVESY = (double) SIZE / (1.05);
@@ -56,6 +53,8 @@ public class Main extends Application {
     private Timeline animation;
     private int myXDirection = 1;
     private int myYDirection = -1;
+    private double initialBouncerXSpeed = 150;
+    private double initialBouncerYSpeed = 220;
     private Level myLevel = new Level(0);
     private Game myGame;
     private Score myScore;
@@ -68,7 +67,7 @@ public class Main extends Application {
     private SplashScreen myLevelSplashScreen = new SplashScreen();
     private SplashScreen myGameRulesSplashScreen = new SplashScreen();
     private Stage stage;
-    private Color[] colorMapping = new Color[]{WHITE, BLUE, PINK, PURPLE, GREENYELLOW, LIGHTCORAL};
+    private Color[] colorMapping = new Color[]{WHITE, BLUE, PINK, PURPLE, GREENYELLOW, LIGHTCORAL, ORANGE};
     private HashSet<Bouncer> activeBouncers;
     private HashSet<Bouncer> toRemoveBouncers;
 
@@ -190,7 +189,7 @@ public class Main extends Application {
 
     public void addBouncerPaddleBlocks() {
         myBouncer = new Bouncer(SIZE / 2 - BOUNCER_SIZE / 2, SIZE / 2 + 60, BOUNCER_SIZE, Color.BLACK,
-                BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
+                initialBouncerXSpeed, initialBouncerYSpeed, myXDirection, myYDirection);
         myPaddle = new Paddle(SIZE / 2 - PADDLE_WIDTH/ 2, SIZE / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
         myLevel.initBlocks(myLevelFiles, colorMapping, BLOCK_WIDTH, BLOCK_HEIGHT);
         myLevel.addBlocksToScene(root);
@@ -255,9 +254,14 @@ public class Main extends Application {
         }
         else if (block.getType() == 5) {
             Bouncer myNewBouncer = new Bouncer(SIZE / 2 - BOUNCER_SIZE / 2, SIZE / 2 + 60, BOUNCER_SIZE, HOTPINK,
-                    BALL_XSPEED, BALL_YSPEED, myXDirection, myYDirection);
+                    initialBouncerXSpeed, initialBouncerYSpeed, myXDirection, myYDirection);
             activeBouncers.add(myNewBouncer);
             root.getChildren().add(myNewBouncer.getBouncer());
+            removeTheBlock(block, i);
+        }
+        else if (block.getType() == 6) {
+            Powerup myPowerup = new Powerup(5);
+            myPowerup.releaseBouncerPowerup(activeBouncers, initialBouncerYSpeed);
             removeTheBlock(block, i);
         }
         else {

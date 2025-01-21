@@ -50,8 +50,8 @@ This project implements the game of Breakout with multiple levels.
 
  * Features implemented:
    * BREAK-01 through BREAK-15
-   * BREAK-17B, BREAK-17C
-   * BREAK-18A
+   * BREAK-17A, BREAK-17B, BREAK-17C
+   * BREAK-18A, BREAK-18B
    * BREAK19B, BREAK19D, BREAK19E, BREAK19F, BREAK19G
 
  * Features unimplemented:

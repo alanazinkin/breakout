@@ -13,8 +13,8 @@ import static breakout.Main.*;
 public class Bouncer extends Circle {
     private Circle myBouncer;
     private int size;
-    private int myXSpeed;
-    private int myYSpeed;
+    private double myXSpeed;
+    private double myYSpeed;
     private int myXDirection;
     private int myYDirection;
 
@@ -22,8 +22,8 @@ public class Bouncer extends Circle {
     final static int EXTRA_SPACE = 1;
 
 
-    public Bouncer(double centerX, double centerY, int size, Color color, int myXSpeed,
-                   int myYSpeed, int myXDirection, int myYDirection) {
+    public Bouncer(double centerX, double centerY, int size, Color color, double myXSpeed,
+                   double myYSpeed, int myXDirection, int myYDirection) {
         myBouncer = new Circle(centerX, centerY, size, color);
         this.myXSpeed = myXSpeed;
         this.myYSpeed = myYSpeed;
@@ -92,6 +92,22 @@ public class Bouncer extends Circle {
 
     public int getYDirection() {
         return this.myYDirection;
+    }
+
+    public void setXSpeed(double speed) {
+        myXSpeed = speed;
+    }
+
+    public void setYSpeed(double speed) {
+        myYSpeed = speed;
+    }
+
+    public double getXSpeed() {
+        return this.myXSpeed;
+    }
+
+    public double getYSpeed() {
+        return this.myYSpeed;
     }
 
     public Circle getBouncer() {

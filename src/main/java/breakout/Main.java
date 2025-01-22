@@ -129,8 +129,12 @@ public class Main extends Application {
     }
 
     // portions of code from bounce lab
+
+    /**
+     *         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
+     * @param elapsedTime used to move bouncer at a constant rate
+     */
     private void step(double elapsedTime) {
-        // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
         // make a copy of the active bouncer set
         for (Bouncer bouncer : new HashSet<>(activeBouncers)) {
             bouncer.move(elapsedTime);
@@ -141,7 +145,6 @@ public class Main extends Application {
             checkForBlockCollision(elapsedTime, bouncer);
         }
         removeStaleBouncers();
-
         myPaddle.keepInBounds(SCREEN_WIDTH);
         myGameDisplay.updateGameStatusText(myGame, myLevel);
         if (myLevel.allBlocksHit()) {

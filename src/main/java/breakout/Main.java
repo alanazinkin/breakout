@@ -60,7 +60,6 @@ public class Main extends Application {
     private GameDisplay myGameDisplay = new GameDisplay();
     private Bouncer myBouncer;
     private Paddle myPaddle;
-    private Life myLives = new Life(NUMLIVES);
     private String[] myLevelFiles;
     private SplashScreen myLevelSplashScreen = new SplashScreen();
     private SplashScreen myGameRulesSplashScreen = new SplashScreen();
@@ -120,10 +119,9 @@ public class Main extends Application {
     private void initializeGame() {
         activeBouncers = new HashSet<>();
         toRemoveBouncers = new HashSet<>();
-        myLives.setLives(NUMLIVES);
         myLevel.setLevel(0);
-        myGame = new Game(NUMLEVELS, 0);
-        myGameDisplay.createGameStatusText(root, "Score: " + myGame.getScore(), "Lives Left: " + myLives.getLives(),
+        myGame = new Game(NUMLEVELS, 0, NUMLIVES);
+        myGameDisplay.createGameStatusText(root, "Score: " + myGame.getScore(), "Lives Left: " + myGame.getLives(),
                 "Current Level: " + myLevel.getLevel(), TEXT_FONT, FONT_SIZE);
         myLevelFiles = myGame.makeLevelFileArray(NUMLEVELS);
         addBouncerPaddleBlocks();
@@ -135,7 +133,7 @@ public class Main extends Application {
         for (Bouncer bouncer : activeBouncers) {
             bouncer.move(elapsedTime);
             bouncer.bounce(SIZE, BOUNCER_SIZE);
-            myGame.handleBallBouncesOut(root, activeBouncers, toRemoveBouncers, bouncer, myLives, myLevel, myGameDisplay, myGame, SIZE);
+            myGame.handleBallBouncesOut(root, activeBouncers, toRemoveBouncers, bouncer, myLevel, myGameDisplay, myGame, SIZE);
             bouncer.paddleIntersect(myPaddle.getPaddle(), myLevel);
             bouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
             checkForBlockCollision(elapsedTime, bouncer);
@@ -143,11 +141,11 @@ public class Main extends Application {
         removeStaleBouncers();
 
         myPaddle.keepInBounds(SIZE);
-        myGameDisplay.updateGameStatusText(myGame, myLives, myLevel);
+        myGameDisplay.updateGameStatusText(myGame, myLevel);
         if (myLevel.allBlocksHit()) {
             goToNextLevel();
         }
-        if (myLives.outOfLives()){
+        if (myGame.outOfLives()){
             endGameAndStartNewOne();
         }
     }
@@ -179,10 +177,10 @@ public class Main extends Application {
         myLevel.endLevel(root);
         Stage levelStage = new Stage();
         if (myLevel.getLevel() == NUMLEVELS) {
-            updateHighScore(myLives.getLives() * 2);
+            updateHighScore(myGame.getLives() * 2);
             int finalScore = myGame.getScore();
             myGame.endGame(animation,"Game Won Splash Screen", "You Won!\n" +
-                    "Lives Remaining: " + myLives.getLives() + "\nFinal Score: " + finalScore + "\nHigh Score: " + highScore +
+                    "Lives Remaining: " + myGame.getLives() + "\nFinal Score: " + finalScore + "\nHigh Score: " + highScore +
                     "\nPress Any Key to Play Again!");
             initializeGame();
         }
@@ -190,7 +188,7 @@ public class Main extends Application {
             Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "New Level Splash Screen", "Level " + myLevel.getLevel() + " Complete!");
             levelStage.setScene(levelScene);
             addBouncerPaddleBlocks();
-            myGameDisplay.createGameStatusText(root, "Score: " + myGame.getScore(), "Lives Left: " + myLives.getLives(),
+            myGameDisplay.createGameStatusText(root, "Score: " + myGame.getScore(), "Lives Left: " + myGame.getLives(),
                     "Current Level: " + myLevel.getLevel(), TEXT_FONT, FONT_SIZE);
             myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
         }
@@ -220,7 +218,7 @@ public class Main extends Application {
             case RIGHT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() + PADDLE_SPEED);
             case LEFT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() - PADDLE_SPEED);
             case R -> myPaddle.resetPaddle();
-            case BACK_SPACE -> myLives.incrementLives();
+            case BACK_SPACE -> myGame.incrementLives();
             case S -> goToNextLevel();
             case TAB -> myBouncer.setYDirection(myBouncer.getYDirection() * -1);
             case U -> myBouncer.setXDirection(myBouncer.getXDirection() * -1);

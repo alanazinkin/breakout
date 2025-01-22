@@ -32,9 +32,9 @@ public class GameDisplay {
         return myText;
     }
 
-    public void updateGameStatusText(Game myGame, Life myLives, Level myLevel) {
+    public void updateGameStatusText(Game myGame, Level myLevel) {
         myScoreText.setText("Score: " + myGame.getScore());
-        myLivesText.setText("Lives Left: " + myLives.getLives());
+        myLivesText.setText("Lives Left: " + myGame.getLives());
         myLevelText.setText("Current Level: " + myLevel.getLevel());
     }
 

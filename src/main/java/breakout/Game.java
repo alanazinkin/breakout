@@ -12,12 +12,14 @@ import static breakout.Main.BOUNCER_SIZE;
 public class Game {
     int myNumLevels;
     int myScore;
+    int myLives;
 
     public static final String LEVELFILE_PATH = "src/main/resources/";
 
-    public Game(int numLevels, int score) {
+    public Game(int numLevels, int score, int lives) {
         myNumLevels = numLevels;
         myScore = score;
+        myLives = lives;
     }
 
     public void endGame(Timeline animation, String title, String text) {
@@ -28,12 +30,12 @@ public class Game {
         gameOverSplashScreen.handleSplashScreenEvent(levelScene, gameOverStage, animation);
     }
 
-    public void handleBallBouncesOut(Group root, HashSet<Bouncer> activeBouncers, HashSet<Bouncer> toRemove, Bouncer myBouncer, Life myLives, Level myLevel, GameDisplay myGameDisplay, Game myGame, int screenSize) {
+    public void handleBallBouncesOut(Group root, HashSet<Bouncer> activeBouncers, HashSet<Bouncer> toRemove, Bouncer myBouncer, Level myLevel, GameDisplay myGameDisplay, Game myGame, int screenSize) {
         if (myBouncer.outTheBounds(screenSize, BOUNCER_SIZE)){
             if (activeBouncers.size() <= 1) {
                 myBouncer.resetBouncer(screenSize, myBouncer.getMySize());
-                myLives.decrementLives();
-                myGameDisplay.updateGameStatusText(myGame, myLives, myLevel);
+                myGame.decrementLives();
+                myGameDisplay.updateGameStatusText(myGame, myLevel);
             }
             else {
                 root.getChildren().remove(myBouncer.getBouncer());
@@ -57,5 +59,25 @@ public class Game {
 
     public int getScore() {
         return myScore;
+    }
+
+    public void decrementLives() {
+        myLives --;
+    }
+
+    public void incrementLives() {
+        myLives ++;
+    }
+
+    public boolean outOfLives() {
+        return (myLives <= 0);
+    }
+
+    public int getLives() {
+        return myLives;
+    }
+
+    public void setLives(int lives) {
+        myLives = lives;
     }
 }

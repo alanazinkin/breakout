@@ -33,11 +33,11 @@ public class Bouncer extends Circle {
         myBouncer.setCenterY(myBouncer.getCenterY() + this.myYSpeed * this.myYDirection * elapsedTime);
     }
 
-    public void bounce(int screenSize, int bouncerSize) {
-        if (myBouncer.getCenterX() >= screenSize - bouncerSize || myBouncer.getCenterX() <= bouncerSize) {
+    public void bounce(int screenWidth, int screenHeight, int bouncerSize) {
+        if (myBouncer.getCenterX() >= screenWidth - bouncerSize || myBouncer.getCenterX() <= bouncerSize) {
             myXDirection *= -1;
         }
-        if (myBouncer.getCenterY() >= screenSize - bouncerSize || myBouncer.getCenterY() <= bouncerSize) {
+        if (myBouncer.getCenterY() >= screenHeight - bouncerSize || myBouncer.getCenterY() <= bouncerSize) {
             myYDirection *= -1;
         }
     }
@@ -61,9 +61,9 @@ public class Bouncer extends Circle {
         myXDirection = (ballCenterX < paddleCenterX) ? -1 : 1;
     }
 
-    public void keepWithinFrame(int screenSize, int bouncerSize) {
-        if (myBouncer.getCenterY() >= screenSize - bouncerSize - EXTRA_SPACE) {
-            resetBouncer(screenSize, bouncerSize);
+    public void keepWithinFrame(int screenHeight, int bouncerSize) {
+        if (myBouncer.getCenterY() >= screenHeight - bouncerSize - EXTRA_SPACE) {
+            resetBouncer(screenHeight, bouncerSize);
         }
     }
 
@@ -75,8 +75,8 @@ public class Bouncer extends Circle {
     }
 
 
-    public boolean outTheBounds(int screenSize, int bouncerSize) {
-        return (myBouncer.getCenterY() >= screenSize - bouncerSize - SPACE);
+    public boolean outTheBounds(int screenHeight, int bouncerSize) {
+        return (myBouncer.getCenterY() >= screenHeight - bouncerSize - SPACE);
     }
 
     public void setXDirection(int direction) {

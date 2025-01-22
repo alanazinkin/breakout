@@ -24,23 +24,24 @@ import static javafx.scene.paint.Color.PURPLE;
 public class Main extends Application {
     public static final String TITLE = "Example JavaFX Animation";
     public static final Color WHITE = new Color(1, 1, 1, 1);
-    public static final int SIZE = 600;
+    public static final int SCREEN_HEIGHT = 600;
+    public static final int SCREEN_WIDTH = 600;
     public static final int FRAMES_PER_SECOND = 60;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private static final int NUMLEVELS = 4;
     public static final int BOUNCER_SIZE = 20;
     public static final int PADDLE_HEIGHT = 5;
     public static final int PADDLE_WIDTH = 80;
-    public static final int BLOCK_WIDTH = 120;
+    public static final int BLOCK_WIDTH = SCREEN_WIDTH / 5;
     public static final int BLOCK_HEIGHT = 40;
     public static final int PADDLE_SPEED = 60;
-    public static final double LIVESX = (double) SIZE / 20;
-    public static final double LIVESY = (double) SIZE / (1.05);
+    public static final double LIVESX = (double) SCREEN_WIDTH / 20;
+    public static final double LIVESY = (double) SCREEN_HEIGHT / (1.05);
     public static final int NUMLIVES = 3;
-    public static final double LEVELX = (double) SIZE / 20;
-    public static final double LEVELY = (double) SIZE / (1.12);
-    public static final double SCOREX = (double) SIZE / 20;
-    public static final double SCOREY = (double) SIZE / (1.2);
+    public static final double LEVELX = (double) SCREEN_WIDTH / 20;
+    public static final double LEVELY = (double) SCREEN_HEIGHT / (1.12);
+    public static final double SCOREX = (double) SCREEN_WIDTH / 20;
+    public static final double SCOREY = (double) SCREEN_HEIGHT / (1.2);
     public static final int FONT_SIZE = 20;
     public static final String TEXT_FONT = "Lucida Bright";
     public static final int LEVEL_SCORE = 10;
@@ -108,7 +109,7 @@ public class Main extends Application {
       */
     public Scene setupScene () {
         initializeGame();
-        myScene = new Scene(root, SIZE, SIZE, WHITE);
+        myScene = new Scene(root, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return myScene;
     }
@@ -130,20 +131,21 @@ public class Main extends Application {
     // portions of code from bounce lab
     private void step(double elapsedTime) {
         // update "actors" attributes a little bit at a time and at a "constant" rate (no matter how many frames per second)
-        for (Bouncer bouncer : activeBouncers) {
+        // make a copy of the active bouncer set
+        for (Bouncer bouncer : new HashSet<>(activeBouncers)) {
             bouncer.move(elapsedTime);
-            bouncer.bounce(SIZE, BOUNCER_SIZE);
-            myGame.handleBallBouncesOut(root, activeBouncers, toRemoveBouncers, bouncer, myLevel, myGameDisplay, myGame, SIZE);
-            bouncer.paddleIntersect(myPaddle.getPaddle(), myLevel);
-            bouncer.keepWithinFrame(SIZE, BOUNCER_SIZE);
+            bouncer.bounce(SCREEN_WIDTH, SCREEN_HEIGHT, BOUNCER_SIZE);
+            myGame.handleBallBouncesOut(root, activeBouncers, toRemoveBouncers, bouncer, myLevel, myGameDisplay, myGame, SCREEN_HEIGHT);
+            bouncer.paddleIntersect(myPaddle.getMyPaddle(), myLevel);
+            bouncer.keepWithinFrame(SCREEN_HEIGHT, BOUNCER_SIZE);
             checkForBlockCollision(elapsedTime, bouncer);
         }
         removeStaleBouncers();
 
-        myPaddle.keepInBounds(SIZE);
+        myPaddle.keepInBounds(SCREEN_WIDTH);
         myGameDisplay.updateGameStatusText(myGame, myLevel);
         if (myLevel.allBlocksHit()) {
-            goToNextLevel();
+            advanceLevel(animation);
         }
         if (myGame.outOfLives()){
             endGameAndStartNewOne();
@@ -167,41 +169,45 @@ public class Main extends Application {
         initializeGame();
     }
 
-    private void goToNextLevel() {
+    private void advanceLevel(Timeline animation) {
         animation.pause();
         updateHighScore(LEVEL_SCORE);
-        advanceLevel(animation);
-    }
-
-    private void advanceLevel(Timeline animation) {
         myLevel.endLevel(root);
         Stage levelStage = new Stage();
         if (myLevel.getLevel() == NUMLEVELS) {
-            updateHighScore(myGame.getLives() * 2);
-            int finalScore = myGame.getScore();
-            myGame.endGame(animation,"Game Won Splash Screen", "You Won!\n" +
-                    "Lives Remaining: " + myGame.getLives() + "\nFinal Score: " + finalScore + "\nHigh Score: " + highScore +
-                    "\nPress Any Key to Play Again!");
-            initializeGame();
+            restartCompletedGame(animation);
         }
         else {
-            Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "New Level Splash Screen", "Level " + myLevel.getLevel() + " Complete!");
-            levelStage.setScene(levelScene);
-            addBouncerPaddleBlocks();
-            myGameDisplay.createGameStatusText(root, "Score: " + myGame.getScore(), "Lives Left: " + myGame.getLives(),
-                    "Current Level: " + myLevel.getLevel(), TEXT_FONT, FONT_SIZE);
-            myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
+            loadNextLevel(animation, levelStage);
         }
     }
 
+    private void loadNextLevel(Timeline animation, Stage levelStage) {
+        Scene levelScene = myLevelSplashScreen.showSplashScreen(levelStage, "New Level Splash Screen", "Level " + myLevel.getLevel() + " Complete!");
+        levelStage.setScene(levelScene);
+        addBouncerPaddleBlocks();
+        myGameDisplay.createGameStatusText(root, "Score: " + myGame.getScore(), "Lives Left: " + myGame.getLives(),
+                "Current Level: " + myLevel.getLevel(), TEXT_FONT, FONT_SIZE);
+        myLevelSplashScreen.handleSplashScreenEvent(levelScene, levelStage, animation);
+    }
+
+    private void restartCompletedGame(Timeline animation) {
+        updateHighScore(myGame.getLives() * 2);
+        int finalScore = myGame.getScore();
+        myGame.endGame(animation,"Game Won Splash Screen", "You Won!\n" +
+                "Lives Remaining: " + myGame.getLives() + "\nFinal Score: " + finalScore + "\nHigh Score: " + highScore +
+                "\nPress Any Key to Play Again!");
+        initializeGame();
+    }
+
     public void addBouncerPaddleBlocks() {
-        myBouncer = new Bouncer(SIZE / 2 - BOUNCER_SIZE / 2, SIZE / 2 + 60, BOUNCER_SIZE, Color.BLACK,
+        myBouncer = new Bouncer(SCREEN_WIDTH / 2 - BOUNCER_SIZE / 2, SCREEN_HEIGHT / 2 + 60, BOUNCER_SIZE, Color.BLACK,
                 initialBouncerXSpeed, initialBouncerYSpeed, myXDirection, myYDirection);
-        myPaddle = new Paddle(SIZE / 2 - PADDLE_WIDTH/ 2, SIZE / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
+        myPaddle = new Paddle(SCREEN_WIDTH / 2 - PADDLE_WIDTH/ 2, SCREEN_HEIGHT / 2 + 100, PADDLE_WIDTH, PADDLE_HEIGHT);
+        root.getChildren().add(myBouncer.getBouncer());
+        root.getChildren().add(myPaddle.getMyPaddle());
         myLevel.initBlocks(myLevelFiles, colorMapping, BLOCK_WIDTH, BLOCK_HEIGHT);
         myLevel.addBlocksToScene(root);
-        root.getChildren().add(myBouncer.getBouncer());
-        root.getChildren().add(myPaddle.getPaddle());
         resetActiveBouncers();
     }
 
@@ -209,20 +215,6 @@ public class Main extends Application {
         activeBouncers.clear();
         toRemoveBouncers.clear();
         activeBouncers.add(myBouncer);
-    }
-
-    private void handleKeyInput (KeyCode code) {
-        // NOTE new Java syntax that some prefer (but watch out for the many special cases!)
-        //   https://blog.jetbrains.com/idea/2019/02/java-12-and-intellij-idea/
-        switch (code) {
-            case RIGHT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() + PADDLE_SPEED);
-            case LEFT -> myPaddle.getPaddle().setX(myPaddle.getPaddle().getX() - PADDLE_SPEED);
-            case R -> myPaddle.resetPaddle();
-            case BACK_SPACE -> myGame.incrementLives();
-            case S -> goToNextLevel();
-            case TAB -> myBouncer.setYDirection(myBouncer.getYDirection() * -1);
-            case U -> myBouncer.setXDirection(myBouncer.getXDirection() * -1);
-        }
     }
 
     public void checkForBlockCollision(double elapsedTime, Bouncer bouncer) {
@@ -245,6 +237,7 @@ public class Main extends Application {
         removeHitBlock(block, i, elapsedTime);
     }
 
+    // inheritance could reduce the complicated structure
     private void removeHitBlock(Block block, int i, double elapsedTime) {
         if (block.getType() == 1) {
             removeTheBlock(block, i);
@@ -260,7 +253,7 @@ public class Main extends Application {
             removeTheBlock(block, i);
         }
         else if (block.getType() == 5) {
-            Bouncer myNewBouncer = new Bouncer(SIZE / 2 - BOUNCER_SIZE / 2, SIZE / 2 + 60, BOUNCER_SIZE, HOTPINK,
+            Bouncer myNewBouncer = new Bouncer(SCREEN_WIDTH / 2 - BOUNCER_SIZE / 2, SCREEN_HEIGHT / 2 + 60, BOUNCER_SIZE, HOTPINK,
                     initialBouncerXSpeed, initialBouncerYSpeed, myXDirection, myYDirection);
             activeBouncers.add(myNewBouncer);
             root.getChildren().add(myNewBouncer.getBouncer());
@@ -297,6 +290,20 @@ public class Main extends Application {
     private void updateHighScore(int hitBrickScore) {
         myGame.increaseScore(hitBrickScore);
         highScore = Math.max(myGame.getScore(), highScore);
+    }
+
+    private void handleKeyInput (KeyCode code) {
+        // NOTE new Java syntax that some prefer (but watch out for the many special cases!)
+        //   https://blog.jetbrains.com/idea/2019/02/java-12-and-intellij-idea/
+        switch (code) {
+            case RIGHT -> myPaddle.getMyPaddle().setX(myPaddle.getMyPaddle().getX() + PADDLE_SPEED);
+            case LEFT -> myPaddle.getMyPaddle().setX(myPaddle.getMyPaddle().getX() - PADDLE_SPEED);
+            case R -> myPaddle.resetPaddle();
+            case BACK_SPACE -> myGame.incrementLives();
+            case S -> advanceLevel(animation);
+            case TAB -> myBouncer.setYDirection(myBouncer.getYDirection() * -1);
+            case U -> myBouncer.setXDirection(myBouncer.getXDirection() * -1);
+        }
     }
 
     public static void main (String[] args) {

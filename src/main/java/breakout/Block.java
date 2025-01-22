@@ -1,21 +1,14 @@
 package breakout;
 
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import java.util.ArrayList;
-import javafx.scene.shape.Shape;
-
-import java.lang.reflect.Array;
-
-import static javafx.scene.paint.Color.*;
 
 public class Block {
     private Rectangle myBlock;
-    private int type;
-    private int row;
+    private int myType;
+    private int myRow;
     private boolean isInCooldown = false;
-    private double cooldownTime;
+    private double myCooldownTime;
 
     public Block(int myX, int myY, double length, double height, Color color, int type, int row) {
         myBlock = new Rectangle(myX, myY, length, height);
@@ -37,18 +30,17 @@ public class Block {
     }
 
     public int getType() {
-        return type;
+        return myType;
     }
     public void setType(int type) {
-        this.type = type;
+        myType = type;
     }
 
-    public void setRow(int row) {
-        this.row = row;
+    public void setRow(int row) {myRow = row;
     }
 
     public int getRow() {
-        return row;
+        return myRow;
     }
 
     // cooldown idea from: https://plarium.com/en/glossary/cooldown/#:~:text=The%20cooldown%20definition%20in%20gaming,it%20fair%20and%20more%20strategic.
@@ -58,13 +50,13 @@ public class Block {
 
     public void startCooldown(double time) {
         isInCooldown = true;
-        cooldownTime = time;
+        myCooldownTime = time;
     }
 
     public void updateCooldown(double elapsedTime) {
         if (isInCooldown) {
-            cooldownTime -= elapsedTime;
-            if (cooldownTime <= 0) {
+            myCooldownTime -= elapsedTime;
+            if (myCooldownTime <= 0) {
                 isInCooldown = false;
             }
         }

@@ -30,10 +30,10 @@ public class Game {
         gameOverSplashScreen.handleSplashScreenEvent(levelScene, gameOverStage, animation);
     }
 
-    public void handleBallBouncesOut(Group root, HashSet<Bouncer> activeBouncers, HashSet<Bouncer> toRemove, Bouncer myBouncer, Level myLevel, GameDisplay myGameDisplay, Game myGame, int screenSize) {
-        if (myBouncer.outTheBounds(screenSize, BOUNCER_SIZE)){
+    public void handleBallBouncesOut(Group root, HashSet<Bouncer> activeBouncers, HashSet<Bouncer> toRemove, Bouncer myBouncer, Level myLevel, GameDisplay myGameDisplay, Game myGame, int screenHeight) {
+        if (myBouncer.outTheBounds(screenHeight, BOUNCER_SIZE)){
             if (activeBouncers.size() <= 1) {
-                myBouncer.resetBouncer(screenSize, myBouncer.getMySize());
+                myBouncer.resetBouncer(screenHeight, myBouncer.getMySize());
                 myGame.decrementLives();
                 myGameDisplay.updateGameStatusText(myGame, myLevel);
             }

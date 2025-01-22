@@ -22,7 +22,6 @@ public class SplashScreen {
         nextLevelText.setFont(Font.font(24));
         nextLevelText.setTextAlignment(TextAlignment.CENTER);
 
-
         StackPane layout = new StackPane();
         layout.getChildren().add(nextLevelText);
 

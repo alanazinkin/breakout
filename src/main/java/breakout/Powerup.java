@@ -9,17 +9,17 @@ import java.util.HashSet;
 import static breakout.Main.*;
 
 public class Powerup {
-    int time;
+    int myTime;
 
     public Powerup(int time) {
-        this.time = time;
+        myTime = time;
     }
 
     // ChatGPT assisted in writing this code
     public void releasePaddlePowerup(Paddle myPaddle) {
         myPaddle.changePaddleWidth(PADDLE_WIDTH * 2);
         Timeline endPowerup = new Timeline(
-                new KeyFrame(Duration.seconds(time), event -> myPaddle.changePaddleWidth(PADDLE_WIDTH))
+                new KeyFrame(Duration.seconds(myTime), event -> myPaddle.changePaddleWidth(PADDLE_WIDTH))
         );
         endPowerup.setCycleCount(1);
         endPowerup.play();
@@ -28,7 +28,7 @@ public class Powerup {
     public void releaseBouncerPowerup(HashSet<Bouncer> myActiveBouncers, double initialYspeed, double newSpeed) {
         speedUpBouncers(myActiveBouncers, newSpeed);
         Timeline endPowerup = new Timeline(
-                new KeyFrame(Duration.seconds(time), event -> slowDownBouncers(myActiveBouncers, initialYspeed))
+                new KeyFrame(Duration.seconds(myTime), event -> slowDownBouncers(myActiveBouncers, initialYspeed))
         );
         endPowerup.setCycleCount(1);
         endPowerup.play();

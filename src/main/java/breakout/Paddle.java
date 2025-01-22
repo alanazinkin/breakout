@@ -5,32 +5,32 @@ import javafx.scene.shape.Rectangle;
 import static breakout.Main.*;
 
 public class Paddle {
-    private Rectangle Paddle;
+    private Rectangle myPaddle;
 
     public Paddle(double x, double y, double width, double height) {
-        Paddle = new Rectangle(x, y, width, height);
+        myPaddle = new Rectangle(x, y, width, height);
     }
 
-    public void keepInBounds(int size) {
-        if (Paddle.getX() <= 0) {
-            Paddle.setX(0);
+    public void keepInBounds(int screenWidth) {
+        if (myPaddle.getX() <= 0) {
+            myPaddle.setX(0);
         }
-        if (Paddle.getX()  >= size - Paddle.getWidth()) {
-            Paddle.setX(size - Paddle.getWidth());
+        if (myPaddle.getX()  >= screenWidth - myPaddle.getWidth()) {
+            myPaddle.setX(screenWidth - myPaddle.getWidth());
         }
     }
 
     public void changePaddleWidth(int width) {
-        Paddle.setWidth(width);
+        myPaddle.setWidth(width);
     }
 
     public void resetPaddle() {
-        Paddle.setX(SIZE / 2 - PADDLE_WIDTH/ 2);
-        Paddle.setY(SIZE / 2 + 100);
+        myPaddle.setX(SCREEN_WIDTH / 2 - PADDLE_WIDTH/ 2);
+        myPaddle.setY(SCREEN_HEIGHT / 2 + 100);
     }
 
-    public Rectangle getPaddle() {
-        return Paddle;
+    public Rectangle getMyPaddle() {
+        return myPaddle;
     }
 
 }

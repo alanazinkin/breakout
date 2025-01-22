@@ -28,7 +28,7 @@ public class Main extends Application {
     public static final int SCREEN_WIDTH = 600;
     public static final int FRAMES_PER_SECOND = 60;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    private static final int NUMLEVELS = 4;
+    private static final int NUMLEVELS = 5;
     public static final int BOUNCER_SIZE = 20;
     public static final int PADDLE_HEIGHT = 5;
     public static final int PADDLE_WIDTH = 80;
@@ -166,8 +166,9 @@ public class Main extends Application {
     private void endGameAndStartNewOne() {
         int endScore = myGame.getScore();
         myLevel.endLevel(root);
+        int finalLevel = myLevel.getLevel() - 1;
         myGame.endGame(animation, "Game Over Splash Screen", "Game Over!\n" + "Final Level: " +
-                myLevel.getLevel() + "\nFinal Score: " + endScore + "\nHigh Score: " + highScore +
+            finalLevel + "\nFinal Score: " + endScore + "\nHigh Score: " + highScore +
                 "\nPress Any Key to Restart!");
         initializeGame();
     }

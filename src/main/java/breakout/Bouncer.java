@@ -34,10 +34,10 @@ public class Bouncer extends Circle {
     }
 
     public void bounce(int screenWidth, int screenHeight, int bouncerSize) {
-        if (myBouncer.getCenterX() >= screenWidth - bouncerSize || myBouncer.getCenterX() <= bouncerSize) {
+        if (myBouncer.getCenterX() >= screenWidth - bouncerSize - 1 || myBouncer.getCenterX() <= bouncerSize + 1) {
             myXDirection *= -1;
         }
-        if (myBouncer.getCenterY() >= screenHeight - bouncerSize || myBouncer.getCenterY() <= bouncerSize) {
+        if (myBouncer.getCenterY() >= screenHeight - bouncerSize - 1 || myBouncer.getCenterY() <= bouncerSize + 1) {
             myYDirection *= -1;
         }
     }

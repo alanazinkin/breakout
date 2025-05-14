@@ -81,9 +81,6 @@ This assignment was a perfect introduction to this class. It taught me various
 essential skills for this course, and made me excited to learn new strategies for
 designing and debugging code. This project would have been significantly easier had I
 learned inheritance earlier, and I am excited to learn techniques such as abstraction for future
-development. However, it was also very challenging given the limited
-office hours held during the first two weeks. A bit of extra support may have been helpful
-as students get adjusted to this course. Overall, I enjoyed this project and am extremely proud of 
-the progress I made in such a short period of time. I would certainly retain this project in future
-semesters. 
+development. Overall, I enjoyed this project and am extremely proud of the progress I made in such
+a short period of time. I would certainly retain this project in future semesters. 
 
